@@ -1,0 +1,35 @@
+/* Google font link */
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+/* Tailwind & DaisyUI setup */
+@import "tailwindcss";
+
+@plugin "daisyui" {
+  themes: light --default;
+}
+
+/* Custom Theme */
+@plugin "daisyui/theme" {
+  name: "route-lynk-light";
+  default: true;
+  --color-primary: #0052d4;
+  --color-secondary: #4364f7;
+  --color-accent: #6fb1fc;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+}
+
+/* Utility Classes */
+.btn-gradient {
+  @apply text-white border-none bg-[linear-gradient(125deg,#0052D4_0%,#4364F7_40%,#6FB1FC_100%)]
+  hover:bg-[linear-gradient(125deg,#6FB1FC_0%,#4364F7_50%,#0052D4_100%)]
+  hover:scale-105 transition-transform ease-in-out duration-200 shadow-lg cursor-pointer;
+}
+
+.text-gradient {
+  @apply bg-[linear-gradient(125deg,#0052D4_0%,#4364F7_40%,#6FB1FC_100%)]
+  hover:bg-[linear-gradient(125deg,#6FB1FC_0%,#4364F7_50%,#0052D4_100%)]
+  bg-clip-text text-transparent transition-all duration-500;
+}
