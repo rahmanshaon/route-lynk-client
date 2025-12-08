@@ -8,6 +8,7 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import Profile from "../pages/Dashboard/Shared/Profile";
 import AddTicket from "../pages/Dashboard/Vendor/AddTicket";
 import MyAddedTickets from "../pages/Dashboard/Vendor/MyAddedTickets";
+import ManageTickets from "../pages/Dashboard/Admin/ManageTickets";
 
 const router = createBrowserRouter([
   // Public Routes
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: "my-added-tickets",
         element: <MyAddedTickets />,
+      },
+      {
+        path: "manage-tickets",
+        element: <ManageTickets />,
       },
     ],
   },
