@@ -14,6 +14,8 @@ import TicketDetails from "../pages/TicketDetails/TicketDetails";
 import MyBookings from "../pages/Dashboard/User/MyBookings";
 import RequestedBookings from "../pages/Dashboard/Vendor/RequestedBookings";
 import Payment from "../components/Dashboard/User/Payment";
+import TransactionHistory from "../pages/Dashboard/User/TransactionHistory";
+import RevenueOverview from "../pages/Dashboard/Vendor/RevenueOverview";
 
 const router = createBrowserRouter([
   // Public Routes
@@ -89,6 +91,8 @@ const router = createBrowserRouter([
         path: "payment",
         element: <Payment />,
       },
+      { path: "history", element: <TransactionHistory /> },
+      { path: "revenue", element: <RevenueOverview /> },
     ],
   },
 ]);
