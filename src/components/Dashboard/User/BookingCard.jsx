@@ -9,6 +9,7 @@ import {
   FaExclamationCircle,
 } from "react-icons/fa";
 import CountdownTimer from "../../Shared/CountdownTimer";
+import { Link } from "react-router";
 
 const BookingCard = ({ booking }) => {
   // Status Colors
@@ -144,9 +145,13 @@ const BookingCard = ({ booking }) => {
           </div>
 
           {booking.status === "accepted" && (
-            <button className="btn btn-sm btn-primary h-10 px-4 rounded-lg shadow-blue-200 shadow-md animate-pulse border-none">
-              Pay Now
-            </button>
+            <Link
+              to="/dashboard/payment"
+              state={{ booking }}
+              className="btn btn-sm btn-primary h-9 min-h-0 text-xs font-bold shadow-md animate-pulse"
+            >
+              Pay Now <FaArrowRight />
+            </Link>
           )}
           {booking.status === "paid" && (
             <button className="btn btn-sm btn-outline btn-success h-9 min-h-0 gap-2">

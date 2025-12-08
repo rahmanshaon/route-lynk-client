@@ -13,6 +13,7 @@ import AllTickets from "../pages/AllTickets/AllTickets";
 import TicketDetails from "../pages/TicketDetails/TicketDetails";
 import MyBookings from "../pages/Dashboard/User/MyBookings";
 import RequestedBookings from "../pages/Dashboard/Vendor/RequestedBookings";
+import Payment from "../components/Dashboard/User/Payment";
 
 const router = createBrowserRouter([
   // Public Routes
@@ -83,6 +84,10 @@ const router = createBrowserRouter([
       {
         path: "bookings",
         element: <RequestedBookings />,
+      },
+      {
+        path: "payment",
+        element: <Payment />,
       },
     ],
   },
