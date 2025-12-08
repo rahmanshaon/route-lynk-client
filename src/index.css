@@ -17,9 +17,13 @@
   --color-accent: #6fb1fc;
 }
 
+@theme {
+  --font-sans: "Inter", sans-serif;
+}
+
 body {
-  font-family: "Inter", sans-serif;
-  @apply bg-base-200 text-base-content;
+  font-family: var(--font-sans);
+  @apply bg-base-200 text-base-content min-h-screen antialiased;
 }
 
 /* Utility Classes */
