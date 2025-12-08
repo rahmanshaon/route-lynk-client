@@ -5,11 +5,15 @@ import { Link, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import useAuth from "../../hooks/useAuth";
 import useTitle from "../../hooks/useTitle";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Register = () => {
   useTitle("Register");
   const [showPassword, setShowPassword] = useState(false);
+
   const navigate = useNavigate();
+  const axiosPublic = useAxiosPublic();
+  const { createUser, updateUserProfile, googleSignIn } = useAuth();
 
   const {
     register,
@@ -17,48 +21,63 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-  const { createUser, updateUserProfile, googleSignIn } = useAuth();
+  // Handle Email/Password Registration
+  const onSubmit = async (data) => {
+    try {
+      // Create User in Firebase
+      await createUser(data.email, data.password);
 
-  const onSubmit = (data) => {
+      // Update Profile in Firebase
+      await updateUserProfile(data.name, data.photoURL);
 
-    // Create User in Firebase
-    createUser(data.email, data.password)
-      .then((result) => {
-        const user = result.user;
-        console.log("Firebase User Created:", user);
+      // Save User Data to MongoDB
+      const userInfo = {
+        name: data.name,
+        email: data.email,
+        image: data.photoURL,
+      };
 
-        // Update Profile with Name & Photo
-        updateUserProfile(data.name, data.photoURL)
-          .then(() => {
-            toast.success(`Welcome, ${data.name}! Registration successful.`);
-            navigate("/");
-          })
-          .catch((err) => {
-            console.error("Profile Update Error:", err);
-            toast.error("Account created, but profile update failed.");
-          });
-      })
-      .catch((error) => {
-        console.error("Registration Error:", error);
-        // Handle Firebase errors (email already in use)
-        if (error.code === "auth/email-already-in-use") {
-          toast.error("This email is already registered.");
-        } else {
-          toast.error(error.message);
-        }
-      });
+      const res = await axiosPublic.put(`/users/${data.email}`, userInfo);
+
+      // Verify Database Success & Redirect
+      if (res.data.upsertedId || res.data.matchedCount > 0) {
+        toast.success(`Welcome to RouteLynk, ${data.name}!`);
+        navigate("/");
+      } else {
+        // Fallback
+        toast.success("Account created successfully!");
+        navigate("/");
+      }
+    } catch (error) {
+      console.error(error);
+      if (error.code === "auth/email-already-in-use") {
+        toast.error("This email is already registered. Please login.");
+      } else {
+        toast.error("Registration failed. Please try again.");
+      }
+    }
   };
 
-  const handleGoogleSignIn = () => {
-    googleSignIn()
-      .then((result) => {
-        toast.success(`Welcome, ${result.user.displayName}!`);
-        navigate("/");
-      })
-      .catch((error) => {
-        console.error(error);
-        toast.error("Google Sign-In failed.");
-      });
+  // Handle Google Sign In
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await googleSignIn();
+
+      // Save/Update Google User in MongoDB
+      const userInfo = {
+        name: result.user.displayName,
+        email: result.user.email,
+        image: result.user.photoURL,
+      };
+
+      await axiosPublic.put(`/users/${result.user.email}`, userInfo);
+
+      toast.success("Signed in with Google successfully!");
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      toast.error("Google Sign-In failed. Please try again.");
+    }
   };
 
   return (
@@ -78,7 +97,9 @@ const Register = () => {
               {/* Name */}
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text font-semibold mb-2">Full Name</span>
+                  <span className="label-text font-semibold mb-2">
+                    Full Name
+                  </span>
                 </label>
                 <input
                   type="text"
@@ -98,7 +119,9 @@ const Register = () => {
               {/* Photo URL */}
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text font-semibold mb-2">Photo URL</span>
+                  <span className="label-text font-semibold mb-2">
+                    Photo URL
+                  </span>
                 </label>
                 <input
                   type="url"
