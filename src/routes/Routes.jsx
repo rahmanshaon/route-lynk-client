@@ -11,6 +11,8 @@ import MyAddedTickets from "../pages/Dashboard/Vendor/MyAddedTickets";
 import ManageTickets from "../pages/Dashboard/Admin/ManageTickets";
 import AllTickets from "../pages/AllTickets/AllTickets";
 import TicketDetails from "../pages/TicketDetails/TicketDetails";
+import MyBookings from "../pages/Dashboard/User/MyBookings";
+import RequestedBookings from "../pages/Dashboard/Vendor/RequestedBookings";
 
 const router = createBrowserRouter([
   // Public Routes
@@ -73,6 +75,14 @@ const router = createBrowserRouter([
       {
         path: "manage-tickets",
         element: <ManageTickets />,
+      },
+      {
+        path: "my-bookings",
+        element: <MyBookings />,
+      },
+      {
+        path: "bookings",
+        element: <RequestedBookings />,
       },
     ],
   },
