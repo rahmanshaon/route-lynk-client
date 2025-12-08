@@ -8,15 +8,16 @@ const DashboardLayout = () => {
   return (
     <div className="drawer lg:drawer-open font-sans">
       <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />
-      
-      {/* --- Main Content Area --- */}
-      {/* REMOVED: bg-base-100. It will now be transparent and show body's bg-base-200 */}
+
+      {/* Main Content */}
       <div className="drawer-content flex flex-col">
-        
-        {/* Mobile Header (Only visible on small screens) */}
+        {/* Mobile Header */}
         <div className="w-full navbar bg-base-100 border-b border-base-200 lg:hidden sticky top-0 z-50 shadow-sm">
           <div className="flex-none">
-            <label htmlFor="dashboard-drawer" className="btn btn-square btn-ghost">
+            <label
+              htmlFor="dashboard-drawer"
+              className="btn btn-square btn-ghost"
+            >
               <HiMenuAlt2 className="text-2xl" />
             </label>
           </div>
@@ -31,9 +32,13 @@ const DashboardLayout = () => {
         </div>
       </div>
 
-      {/* --- Sidebar Area --- */}
+      {/* Sidebar */}
       <div className="drawer-side z-50">
-        <label htmlFor="dashboard-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
+        <label
+          htmlFor="dashboard-drawer"
+          aria-label="close sidebar"
+          className="drawer-overlay"
+        ></label>
         <Sidebar />
       </div>
     </div>

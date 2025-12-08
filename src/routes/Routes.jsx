@@ -6,6 +6,7 @@ import Register from "../pages/Register/Register";
 import PrivateRoute from "./PrivateRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
 import Profile from "../pages/Dashboard/Shared/Profile";
+import AddTicket from "../pages/Dashboard/Vendor/AddTicket";
 
 const router = createBrowserRouter([
   // Public Routes
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Profile />,
+      },
+      {
+        path: "add-ticket",
+        element: <AddTicket />,
       },
     ],
   },
