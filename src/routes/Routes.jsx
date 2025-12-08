@@ -7,6 +7,7 @@ import PrivateRoute from "./PrivateRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
 import Profile from "../pages/Dashboard/Shared/Profile";
 import AddTicket from "../pages/Dashboard/Vendor/AddTicket";
+import MyAddedTickets from "../pages/Dashboard/Vendor/MyAddedTickets";
 
 const router = createBrowserRouter([
   // Public Routes
@@ -38,9 +39,9 @@ const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-      { 
+      {
         path: "profile",
-        element: <Profile /> 
+        element: <Profile />,
       },
       {
         path: "",
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
       {
         path: "add-ticket",
         element: <AddTicket />,
+      },
+      {
+        path: "my-added-tickets",
+        element: <MyAddedTickets />,
       },
     ],
   },
