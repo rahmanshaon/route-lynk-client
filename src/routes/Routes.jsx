@@ -10,6 +10,7 @@ import AddTicket from "../pages/Dashboard/Vendor/AddTicket";
 import MyAddedTickets from "../pages/Dashboard/Vendor/MyAddedTickets";
 import ManageTickets from "../pages/Dashboard/Admin/ManageTickets";
 import AllTickets from "../pages/AllTickets/AllTickets";
+import TicketDetails from "../pages/TicketDetails/TicketDetails";
 
 const router = createBrowserRouter([
   // Public Routes
@@ -32,6 +33,14 @@ const router = createBrowserRouter([
       {
         path: "/all-tickets",
         element: <AllTickets />,
+      },
+      {
+        path: "/ticket/:id",
+        element: (
+          <PrivateRoute>
+            <TicketDetails />
+          </PrivateRoute>
+        ),
       },
     ],
   },

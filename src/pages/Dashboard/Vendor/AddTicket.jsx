@@ -7,6 +7,7 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useTitle from "../../../hooks/useTitle";
 import AddTicketForm from "../../../components/Dashboard/Vendor/AddTicketForm";
 import { imageUpload } from "../../../utils/imageUpload";
+import { convertTo12Hour } from "../../../utils/timeUtils";
 
 const AddTicket = () => {
   useTitle("Add Ticket");
@@ -29,6 +30,9 @@ const AddTicket = () => {
       const imageFile = data.image[0];
       const photoURL = await imageUpload(imageFile);
 
+      // Convert Time
+      const formattedTime = convertTo12Hour(data.departureTime);
+
       // Prepare Data
       const ticketData = {
         title: data.title,
@@ -38,7 +42,7 @@ const AddTicket = () => {
         price: parseFloat(data.price),
         quantity: parseInt(data.quantity),
         departureDate: data.departureDate,
-        departureTime: data.departureTime,
+        departureTime: formattedTime,
         description: data.description,
         perks: data.perks || [],
         image: photoURL,
@@ -49,7 +53,6 @@ const AddTicket = () => {
         },
       };
 
-      // Send Data to Server
       const res = await axiosSecure.post("/tickets", ticketData);
 
       if (res.data.insertedId) {
