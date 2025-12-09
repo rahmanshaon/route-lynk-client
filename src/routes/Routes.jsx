@@ -19,6 +19,7 @@ import RevenueOverview from "../pages/Dashboard/Vendor/RevenueOverview";
 import AdminRoute from "./AdminRoute";
 import VendorRoute from "./VendorRoute";
 import Advertise from "../pages/Dashboard/Admin/Advertise";
+import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
 
 const router = createBrowserRouter([
   // Public Routes
@@ -118,6 +119,14 @@ const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <Advertise />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "manage-users",
+        element: (
+          <AdminRoute>
+            <ManageUsers />
           </AdminRoute>
         ),
       },
