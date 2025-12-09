@@ -16,6 +16,8 @@ import RequestedBookings from "../pages/Dashboard/Vendor/RequestedBookings";
 import Payment from "../components/Dashboard/User/Payment";
 import TransactionHistory from "../pages/Dashboard/User/TransactionHistory";
 import RevenueOverview from "../pages/Dashboard/Vendor/RevenueOverview";
+import AdminRoute from "./AdminRoute";
+import VendorRoute from "./VendorRoute";
 
 const router = createBrowserRouter([
   // Public Routes
@@ -59,40 +61,57 @@ const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-      {
-        path: "profile",
-        element: <Profile />,
-      },
-      {
-        path: "",
-        element: <Profile />,
-      },
+      { path: "profile", element: <Profile /> },
+      { path: "", element: <Profile /> },
+
+      // --- USER ROUTES ---
+      { path: "my-bookings", element: <MyBookings /> },
+      { path: "payment", element: <Payment /> },
+      { path: "history", element: <TransactionHistory /> },
+
+      // --- VENDOR ROUTES (PROTECTED) ---
       {
         path: "add-ticket",
-        element: <AddTicket />,
+        element: (
+          <VendorRoute>
+            <AddTicket />
+          </VendorRoute>
+        ),
       },
       {
         path: "my-added-tickets",
-        element: <MyAddedTickets />,
-      },
-      {
-        path: "manage-tickets",
-        element: <ManageTickets />,
-      },
-      {
-        path: "my-bookings",
-        element: <MyBookings />,
+        element: (
+          <VendorRoute>
+            <MyAddedTickets />
+          </VendorRoute>
+        ),
       },
       {
         path: "bookings",
-        element: <RequestedBookings />,
+        element: (
+          <VendorRoute>
+            <RequestedBookings />
+          </VendorRoute>
+        ),
       },
       {
-        path: "payment",
-        element: <Payment />,
+        path: "revenue",
+        element: (
+          <VendorRoute>
+            <RevenueOverview />
+          </VendorRoute>
+        ),
       },
-      { path: "history", element: <TransactionHistory /> },
-      { path: "revenue", element: <RevenueOverview /> },
+
+      // --- ADMIN ROUTES (PROTECTED) ---
+      {
+        path: "manage-tickets",
+        element: (
+          <AdminRoute>
+            <ManageTickets />
+          </AdminRoute>
+        ),
+      },
     ],
   },
 ]);
