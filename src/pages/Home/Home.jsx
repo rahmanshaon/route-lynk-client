@@ -1,10 +1,11 @@
 import React from "react";
+import LatestTickets from "../../components/Home/LatestTickets";
 
 const Home = () => {
   return (
-    <div className="text-center p-16">
-      <h1 className="text-3xl font-bold">Home Page</h1>
-    </div>
+    <>
+      <LatestTickets />
+    </>
   );
 };
 
