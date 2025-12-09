@@ -18,6 +18,7 @@ import TransactionHistory from "../pages/Dashboard/User/TransactionHistory";
 import RevenueOverview from "../pages/Dashboard/Vendor/RevenueOverview";
 import AdminRoute from "./AdminRoute";
 import VendorRoute from "./VendorRoute";
+import Advertise from "../pages/Dashboard/Admin/Advertise";
 
 const router = createBrowserRouter([
   // Public Routes
@@ -109,6 +110,14 @@ const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <ManageTickets />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "advertise",
+        element: (
+          <AdminRoute>
+            <Advertise />
           </AdminRoute>
         ),
       },
