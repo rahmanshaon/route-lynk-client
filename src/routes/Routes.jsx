@@ -21,6 +21,7 @@ import VendorRoute from "./VendorRoute";
 import Advertise from "../pages/Dashboard/Admin/Advertise";
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
 import GuestRoute from "./GuestRoute";
+import ForgetPassword from "../pages/Login/ForgetPassword";
 
 const router = createBrowserRouter([
   // Public Routes
@@ -45,6 +46,14 @@ const router = createBrowserRouter([
         element: (
           <GuestRoute>
             <Register />
+          </GuestRoute>
+        ),
+      },
+      {
+        path: "/forget-password",
+        element: (
+          <GuestRoute>
+            <ForgetPassword />
           </GuestRoute>
         ),
       },

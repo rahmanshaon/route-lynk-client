@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import useAuth from "../../hooks/useAuth";
 import useTitle from "../../hooks/useTitle";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
+import InputField from "../../components/Shared/Form/InputField";
 
 const Register = () => {
   useTitle("Register");
@@ -44,7 +45,6 @@ const Register = () => {
         toast.success(`Welcome to RouteLynk, ${data.name}!`);
         navigate("/");
       } else {
-        // Fallback
         toast.success("Account created successfully!");
         navigate("/");
       }
@@ -81,96 +81,65 @@ const Register = () => {
   };
 
   return (
-    <div className="flex items-center justify-center bg-base-200 py-10 my-10 px-4">
-      <div className="card w-full max-w-lg shadow-2xl bg-base-100">
+    <div className="flex flex-col items-center justify-center py-20 px-4 bg-base-200 transition-colors duration-300">
+      {/* --- Header --- */}
+      <div className="text-center mb-8">
+        <h1 className="text-4xl md:text-5xl font-black text-gradient mb-2">
+          Create Account
+        </h1>
+        <p className="text-base-content/70 font-medium">
+          Join RouteLynk to book tickets easily
+        </p>
+      </div>
+
+      {/* --- Card --- */}
+      <div className="card w-full max-w-sm shadow-2xl bg-base-100 border border-base-200">
         <div className="card-body">
-          <h2 className="text-3xl font-black text-center text-gradient mb-2">
-            Create Account
-          </h2>
-          <p className="text-center text-gray-500 mb-6">
-            Join RouteLynk to book tickets easily
-          </p>
-
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {/* Name & Photo URL */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Name */}
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text font-semibold mb-2">
-                    Full Name
-                  </span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="John Doe"
-                  className={`input input-bordered w-full ${
-                    errors.name ? "input-error" : ""
-                  }`}
-                  {...register("name", { required: "Name is required" })}
-                />
-                {errors.name && (
-                  <span className="text-error text-xs mt-1">
-                    {errors.name.message}
-                  </span>
-                )}
-              </div>
+            {/* Full Name */}
+            <InputField
+              label="Full Name"
+              name="name"
+              placeholder="John Doe"
+              register={register}
+              errors={errors}
+              required
+            />
 
-              {/* Photo URL */}
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text font-semibold mb-2">
-                    Photo URL
-                  </span>
-                </label>
-                <input
-                  type="url"
-                  placeholder="https://example.com/photo.jpg"
-                  className={`input input-bordered w-full ${
-                    errors.photoURL ? "input-error" : ""
-                  }`}
-                  {...register("photoURL", {
-                    required: "Photo URL is required",
-                  })}
-                />
-                {errors.photoURL && (
-                  <span className="text-error text-xs mt-1">
-                    {errors.photoURL.message}
-                  </span>
-                )}
-              </div>
-            </div>
+            {/* Photo URL */}
+            <InputField
+              label="Photo URL"
+              name="photoURL"
+              type="url"
+              placeholder="https://example.com/photo.jpg"
+              register={register}
+              errors={errors}
+              required
+            />
 
-            {/* Email */}
-            <div className="form-control">
+            {/* Email Field */}
+            <InputField
+              label="Email Address"
+              name="email"
+              type="email"
+              placeholder="email@example.com"
+              register={register}
+              errors={errors}
+              required
+            />
+
+            {/* Password Field */}
+            <div className="form-control w-full">
               <label className="label">
-                <span className="label-text font-semibold mb-2">Email</span>
-              </label>
-              <input
-                type="email"
-                placeholder="email@example.com"
-                className={`input input-bordered w-full ${
-                  errors.email ? "input-error" : ""
-                }`}
-                {...register("email", { required: "Email is required" })}
-              />
-              {errors.email && (
-                <span className="text-error text-xs mt-1">
-                  {errors.email.message}
+                <span className="label-text font-bold text-base-content/80 text-sm mb-2">
+                  Password
                 </span>
-              )}
-            </div>
-
-            {/* Password */}
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-semibold mb-2">Password</span>
               </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="******"
-                  className={`input input-bordered w-full ${
+                  className={`input input-bordered w-full bg-base-100 text-base-content placeholder:text-base-content/40 focus:outline-none pr-10 ${
                     errors.password ? "input-error" : ""
                   }`}
                   {...register("password", {
@@ -180,22 +149,22 @@ const Register = () => {
                       message: "Password must be at least 6 characters",
                     },
                     pattern: {
-                      // At least one Uppercase and one Lowercase
                       value: /(?=.*[A-Z])(?=.*[a-z])/,
                       message:
                         "Must include one uppercase and one lowercase letter",
                     },
                   })}
                 />
-                <span
-                  className="absolute right-4 top-3.5 z-50 cursor-pointer text-gray-500 hover:text-primary transition"
+                <button
+                  type="button"
+                  className="absolute right-4 top-3.5 z-10 text-base-content/50 hover:text-primary transition-colors"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <FaEye /> : <FaEyeSlash />}
-                </span>
+                </button>
               </div>
               {errors.password && (
-                <span className="text-error text-xs mt-1">
+                <span className="text-error text-xs mt-1 font-medium">
                   {errors.password.message}
                 </span>
               )}
@@ -203,27 +172,35 @@ const Register = () => {
 
             {/* Submit Button */}
             <div className="form-control mt-6">
-              <button className="btn btn-gradient w-full">Register</button>
+              <button className="btn btn-gradient w-full text-white font-bold text-lg shadow-lg">
+                Register
+              </button>
             </div>
           </form>
 
           {/* Login Link */}
-          <p className="text-center text-sm mt-4">
+          <p className="text-center text-sm mt-6 text-base-content/60">
             Already have an account?{" "}
-            <Link to="/login" className="link link-primary font-bold">
+            <Link
+              to="/login"
+              className="link link-primary font-bold no-underline hover:underline"
+            >
               Login here
             </Link>
           </p>
 
           {/* Divider */}
-          <div className="divider text-sm text-gray-400">OR</div>
+          <div className="divider text-xs font-bold text-base-content/30 uppercase tracking-widest my-6">
+            OR
+          </div>
 
           {/* Social Login */}
           <button
             onClick={handleGoogleSignIn}
-            className="btn btn-outline btn-primary w-full"
+            className="btn btn-outline btn-primary w-full flex items-center gap-2"
           >
-            <FaGoogle /> Sign up with Google
+            <FaGoogle className="text-lg" />
+            Sign up with Google
           </button>
         </div>
       </div>

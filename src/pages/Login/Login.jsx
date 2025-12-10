@@ -5,135 +5,153 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import useAuth from "../../hooks/useAuth";
 import useTitle from "../../hooks/useTitle";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import InputField from "../../components/Shared/Form/InputField";
 
 const Login = () => {
   useTitle("Login");
   const [showPassword, setShowPassword] = useState(false);
 
-  // React Hook Form setup
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm();
 
   const { signIn, googleSignIn } = useAuth();
+  const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
   const location = useLocation();
-
-  // Redirect to where they came from, or home
   const from = location.state?.from?.pathname || "/";
 
-  // Handle Email/Password Login
-  const onSubmit = (data) => {
-    signIn(data.email, data.password)
-      .then((result) => {
-        toast.success("Login Successful!");
-        navigate(from, { replace: true });
-      })
-      .catch((error) => {
-        console.error(error);
-        toast.error("Invalid email or password.");
-      });
+  // Watch email to pass it to Forget Password page
+  const emailValue = watch("email");
+
+  // --- Email Login ---
+  const onSubmit = async (data) => {
+    try {
+      await signIn(data.email, data.password);
+      toast.success("Login Successful!");
+      navigate(from, { replace: true });
+    } catch (error) {
+      console.error(error);
+      toast.error("Invalid email or password.");
+    }
   };
 
-  // Handle Google Login
-  const handleGoogleSignIn = () => {
-    googleSignIn()
-      .then((result) => {
-        toast.success(`Welcome back, ${result.user.displayName}!`);
-        navigate(from, { replace: true });
-      })
-      .catch((error) => {
-        console.error(error);
-        toast.error("Google Sign-In failed.");
-      });
+  // --- Google Login ---
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await googleSignIn();
+      const userInfo = {
+        name: result.user.displayName,
+        email: result.user.email,
+        image: result.user.photoURL,
+      };
+
+      // Sync with MongoDB
+      await axiosPublic.put(`/users/${result.user.email}`, userInfo);
+
+      toast.success(`Welcome back, ${result.user.displayName}!`);
+      navigate(from, { replace: true });
+    } catch (error) {
+      console.error(error);
+      toast.error("Google Sign-In failed.");
+    }
   };
 
   return (
-    <div className="flex items-center justify-center py-10 my-10 px-4">
-      <div className="card w-full max-w-sm shadow-2xl bg-base-100">
-        <div className="card-body">
-          <h2 className="text-3xl font-black text-center text-gradient mb-6">
-            Welcome Back!
-          </h2>
+    <div className="flex flex-col items-center justify-center py-20 px-4 bg-base-200 transition-colors duration-300">
+      {/* --- Header --- */}
+      <div className="text-center mb-8">
+        <h1 className="text-4xl md:text-4xl font-black text-gradient mb-2">
+          Log In to RouteLynk
+        </h1>
+        <p className="text-base-content/70 font-medium">
+          Access your bookings and manage your journeys
+        </p>
+      </div>
 
+      {/* --- Card --- */}
+      <div className="card w-full max-w-sm shadow-2xl bg-base-100 border border-base-200">
+        <div className="card-body">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Email Field */}
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-semibold mb-2">Email</span>
-              </label>
-              <input
-                type="email"
-                placeholder="email@example.com"
-                className={`input input-bordered w-full ${
-                  errors.email ? "input-error" : ""
-                }`}
-                {...register("email", { required: "Email is required" })}
-              />
-              {errors.email && (
-                <span className="text-error text-xs mt-1">
-                  {errors.email.message}
-                </span>
-              )}
-            </div>
+            <InputField
+              label="Email Address"
+              name="email"
+              type="email"
+              placeholder="email@example.com"
+              register={register}
+              errors={errors}
+              required
+            />
 
             {/* Password Field */}
-            <div className="form-control">
+            <div className="form-control w-full">
               <label className="label">
-                <span className="label-text font-semibold mb-2">Password</span>
+                <span className="label-text font-bold text-base-content/80 text-sm mb-2">
+                  Password
+                </span>
               </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="******"
-                  className={`input input-bordered w-full ${
+                  className={`input input-bordered w-full bg-base-100 text-base-content placeholder:text-base-content/40 focus:outline-none pr-10 ${
                     errors.password ? "input-error" : ""
                   }`}
                   {...register("password", {
                     required: "Password is required",
                   })}
                 />
-                <span
-                  className="absolute right-4 top-3.5 z-50 cursor-pointer text-gray-500 hover:text-primary transition"
+                <button
+                  type="button"
+                  className="absolute right-4 top-3.5 z-10 text-base-content/50 hover:text-primary transition-colors"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <FaEye /> : <FaEyeSlash />}
-                </span>
+                </button>
               </div>
               {errors.password && (
-                <span className="text-error text-xs mt-1">
+                <span className="text-error text-xs mt-1 font-medium">
                   {errors.password.message}
                 </span>
               )}
 
-              {/* <label className="label">
-                <a
-                  href="#"
-                  className="label-text-alt link link-hover text-primary mt-2"
+              {/* Forgot Password */}
+              <label className="label">
+                <Link
+                  to="/forget-password"
+                  state={{ email: emailValue }}
+                  className="label-text-alt link link-hover text-primary font-bold ml-auto mt-2"
                 >
                   Forgot password?
-                </a>
-              </label> */}
+                </Link>
+              </label>
             </div>
 
             {/* Submit Button */}
             <div className="form-control mt-4">
-              <button className="btn btn-gradient w-full">Login</button>
+              <button className="btn btn-gradient w-full text-white font-bold text-lg shadow-lg">
+                Login
+              </button>
             </div>
           </form>
 
           {/* Register Link */}
-          <p className="text-center text-sm mt-4">
+          <p className="text-center text-sm mt-6 text-base-content/60">
             New to RouteLynk?{" "}
             <Link to="/register" className="link link-primary font-bold">
-              Create an account
+              Create Account
             </Link>
           </p>
 
           {/* Divider */}
-          <div className="divider text-sm text-gray-400">OR</div>
+          <div className="divider text-xs font-bold text-base-content/30 uppercase tracking-widest my-6">
+            OR
+          </div>
 
           {/* Social Login */}
           <button

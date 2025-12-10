@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -38,6 +39,11 @@ const AuthProvider = ({ children }) => {
     return signInWithPopup(auth, googleProvider);
   };
 
+  // Reset password
+  const resetPassword = (email) => {
+    return sendPasswordResetEmail(auth, email);
+  };
+
   // Logout
   const logOut = () => {
     setLoading(true);
@@ -53,21 +59,20 @@ const AuthProvider = ({ children }) => {
   };
 
   // Observer: Track User State
-   useEffect(() => {
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      
+
       if (currentUser) {
         // Get Token from Server
         const userInfo = { email: currentUser.email };
-        axiosPublic.post("/jwt", userInfo)
-          .then(res => {
-            if (res.data.token) {
-              // Store Token in LocalStorage
-              localStorage.setItem("access-token", res.data.token);
-              setLoading(false);
-            }
-          })
+        axiosPublic.post("/jwt", userInfo).then((res) => {
+          if (res.data.token) {
+            // Store Token in LocalStorage
+            localStorage.setItem("access-token", res.data.token);
+            setLoading(false);
+          }
+        });
       } else {
         // Remove Token if logged out
         localStorage.removeItem("access-token");
@@ -84,11 +89,13 @@ const AuthProvider = ({ children }) => {
   const authInfo = {
     user,
     loading,
+    setLoading,
     createUser,
     signIn,
     googleSignIn,
     logOut,
     updateUserProfile,
+    resetPassword,
   };
 
   return <AuthContext value={authInfo}>{children}</AuthContext>;

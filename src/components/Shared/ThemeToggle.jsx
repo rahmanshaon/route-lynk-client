@@ -10,14 +10,14 @@ const ThemeToggle = ({ className }) => {
       <input
         type="checkbox"
         onChange={toggleTheme}
-        checked={theme === "route-lynk-dark"}
+        checked={theme === "dark"}
       />
 
       {/* sun icon */}
-      <FaSun className="swap-off fill-current w-6 h-6 text-orange-400" />
+      <FaSun className="swap-off fill-current w-6 h-6 text-blue-500" />
 
       {/* moon icon */}
-      <FaMoon className="swap-on fill-current w-6 h-6 text-blue-400" />
+      <FaMoon className="swap-on fill-current w-6 h-6 text-blue-500" />
     </label>
   );
 };
