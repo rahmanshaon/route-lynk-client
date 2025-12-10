@@ -23,19 +23,16 @@ const AuthProvider = ({ children }) => {
 
   // Create User (Email/Pass)
   const createUser = (email, password) => {
-    setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
   // Login (Email/Pass)
   const signIn = (email, password) => {
-    setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
   // Google Login
   const googleSignIn = () => {
-    setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useLocation } from "react-router";
 import { toast } from "react-toastify";
 import useAuth from "../../hooks/useAuth";
 import useTitle from "../../hooks/useTitle";
@@ -11,10 +11,14 @@ import InputField from "../../components/Shared/Form/InputField";
 const Register = () => {
   useTitle("Register");
   const [showPassword, setShowPassword] = useState(false);
+  const [processing, setProcessing] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation();
   const axiosPublic = useAxiosPublic();
   const { createUser, updateUserProfile, googleSignIn } = useAuth();
+
+  const from = location.state?.from?.pathname || "/";
 
   const {
     register,
@@ -22,16 +26,17 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-  // Handle Email/Password Registration
+  // --- Handle Registration ---
   const onSubmit = async (data) => {
+    setProcessing(true);
     try {
-      // Create User in Firebase
+      // Create User
       await createUser(data.email, data.password);
 
-      // Update Profile in Firebase
+      // Update Profile
       await updateUserProfile(data.name, data.photoURL);
 
-      // Save User Data to MongoDB
+      // Save to MongoDB
       const userInfo = {
         name: data.name,
         email: data.email,
@@ -43,23 +48,26 @@ const Register = () => {
       // Verify Database Success & Redirect
       if (res.data.upsertedId || res.data.matchedCount > 0) {
         toast.success(`Welcome to RouteLynk, ${data.name}!`);
-        navigate("/");
+        navigate(from, { replace: true });
       } else {
         toast.success("Account created successfully!");
-        navigate("/");
+        navigate(from, { replace: true });
       }
     } catch (error) {
-      console.error(error);
       if (error.code === "auth/email-already-in-use") {
-        toast.error("This email is already registered. Please login.");
+        toast.info("Account already exists. Redirecting to Login...");
+        navigate("/login");
       } else {
         toast.error("Registration failed. Please try again.");
       }
+    } finally {
+      setProcessing(false);
     }
   };
 
   // Handle Google Sign In
   const handleGoogleSignIn = async () => {
+    setProcessing(true);
     try {
       const result = await googleSignIn();
 
@@ -73,10 +81,12 @@ const Register = () => {
       await axiosPublic.put(`/users/${result.user.email}`, userInfo);
 
       toast.success("Signed in with Google successfully!");
-      navigate("/");
+      navigate(from, { replace: true });
     } catch (error) {
       console.error(error);
-      toast.error("Google Sign-In failed. Please try again.");
+      toast.error("Google Sign-In failed.");
+    } finally {
+      setProcessing(false);
     }
   };
 
@@ -170,10 +180,17 @@ const Register = () => {
               )}
             </div>
 
-            {/* Submit Button */}
+            {/* Submit Button with Local Spinner */}
             <div className="form-control mt-6">
-              <button className="btn btn-gradient w-full text-white font-bold text-lg shadow-lg">
-                Register
+              <button
+                disabled={processing}
+                className="btn btn-gradient w-full text-white font-bold text-lg shadow-lg disabled:opacity-70"
+              >
+                {processing ? (
+                  <span className="loading loading-spinner"></span>
+                ) : (
+                  "Register"
+                )}
               </button>
             </div>
           </form>
@@ -183,7 +200,7 @@ const Register = () => {
             Already have an account?{" "}
             <Link
               to="/login"
-              className="link link-primary font-bold no-underline hover:underline"
+              className="link link-primary font-bold"
             >
               Login here
             </Link>
@@ -197,6 +214,7 @@ const Register = () => {
           {/* Social Login */}
           <button
             onClick={handleGoogleSignIn}
+            disabled={processing}
             className="btn btn-outline btn-primary w-full flex items-center gap-2"
           >
             <FaGoogle className="text-lg" />

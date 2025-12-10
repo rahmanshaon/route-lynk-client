@@ -1,15 +1,23 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
-import { FaUserShield, FaUserTie, FaBan, FaTrash } from "react-icons/fa";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useTitle from "../../../hooks/useTitle";
+import useAuth from "../../../hooks/useAuth";
+import UserTable from "../../../components/Dashboard/Admin/ManageUsers/UserTable";
+import UserCardGrid from "../../../components/Dashboard/Admin/ManageUsers/UserCardGrid";
 
 const ManageUsers = () => {
   useTitle("Manage Users");
   const axiosSecure = useAxiosSecure();
+  const { user: currentUser } = useAuth();
 
-  const { data: users = [], refetch } = useQuery({
+  // --- Data Fetching ---
+  const {
+    data: users = [],
+    refetch,
+    isLoading,
+  } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
       const res = await axiosSecure.get("/users");
@@ -17,20 +25,32 @@ const ManageUsers = () => {
     },
   });
 
-  // Handle Make Admin / Make Vendor
+  // --- Promote Role ---
   const handleRoleChange = (user, newRole) => {
     Swal.fire({
       title: `Promote to ${newRole}?`,
-      text: `${user.name} will have ${newRole} privileges.`,
+      text: `${user.name} will be given ${newRole} access.`,
       icon: "question",
       showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
       confirmButtonText: "Yes, Promote",
+      background: "#1d232a",
+      color: "#fff",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await axiosSecure.patch(`/users/role/${user._id}`, { role: newRole });
+          const res = await axiosSecure.patch(`/users/role/${user._id}`, {
+            role: newRole,
+          });
           if (res.data.modifiedCount > 0) {
-            Swal.fire("Success!", `${user.name} is now a ${newRole}.`, "success");
+            Swal.fire({
+              title: "Success!",
+              text: `${user.name} is now a ${newRole}.`,
+              icon: "success",
+              timer: 1500,
+              showConfirmButton: false,
+            });
             refetch();
           }
         } catch (error) {
@@ -40,7 +60,7 @@ const ManageUsers = () => {
     });
   };
 
-  // Handle Mark as Fraud
+  // --- Mark Fraud ---
   const handleFraud = (user) => {
     Swal.fire({
       title: "Mark as Fraud?",
@@ -52,9 +72,11 @@ const ManageUsers = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await axiosSecure.patch(`/users/fraud/${user._id}`, { email: user.email });
+          const res = await axiosSecure.patch(`/users/fraud/${user._id}`, {
+            email: user.email,
+          });
           if (res.data.userResult.modifiedCount > 0) {
-            Swal.fire("Banned!", "Vendor marked as fraud and tickets hidden.", "success");
+            Swal.fire("Banned!", "Vendor marked as fraud.", "success");
             refetch();
           }
         } catch (error) {
@@ -64,93 +86,40 @@ const ManageUsers = () => {
     });
   };
 
-  return (
-    <div>
-      <h2 className="text-3xl font-black text-gradient mb-6">Manage Users</h2>
-
-      <div className="overflow-x-auto bg-base-100 shadow-xl rounded-xl border border-base-200">
-        <table className="table">
-          <thead className="bg-base-200 text-gray-600 uppercase text-xs">
-            <tr>
-              <th>#</th>
-              <th>User</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th className="text-center">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user, index) => (
-              <tr key={user._id} className="hover:bg-base-50">
-                <th>{index + 1}</th>
-                <td>
-                  <div className="flex items-center gap-3">
-                    <div className="avatar">
-                      <div className="mask mask-squircle w-10 h-10">
-                        <img src={user.image || "https://i.ibb.co/wZQG7SwS/user.png"} alt="User" />
-                      </div>
-                    </div>
-                    <div className="font-bold">{user.name}</div>
-                  </div>
-                </td>
-                <td className="text-sm text-gray-500">{user.email}</td>
-                <td>
-                  <span className={`badge badge-sm uppercase font-bold text-white ${
-                    user.role === 'admin' ? 'badge-primary' : 
-                    user.role === 'vendor' ? 'badge-secondary' : 
-                    user.role === 'fraud' ? 'badge-error' : 
-                    'badge-ghost text-gray-600'
-                  }`}>
-                    {user.role}
-                  </span>
-                </td>
-                <td className="flex justify-center gap-2">
-                  {user.role === "fraud" ? (
-                    <span className="text-error font-bold text-xs flex items-center gap-1">
-                        <FaBan /> BANNED
-                    </span>
-                  ) : (
-                    <>
-                        {/* Make Vendor */}
-                        {user.role === "user" && (
-                            <button 
-                                onClick={() => handleRoleChange(user, "vendor")}
-                                className="btn btn-xs btn-outline btn-secondary"
-                                title="Make Vendor"
-                            >
-                                <FaUserTie /> Vendor
-                            </button>
-                        )}
-
-                        {/* Make Admin */}
-                        {user.role !== "admin" && (
-                            <button 
-                                onClick={() => handleRoleChange(user, "admin")}
-                                className="btn btn-xs btn-outline btn-primary"
-                                title="Make Admin"
-                            >
-                                <FaUserShield /> Admin
-                            </button>
-                        )}
-
-                        {/* Mark Fraud (Only for Vendors) */}
-                        {user.role === "vendor" && (
-                            <button 
-                                onClick={() => handleFraud(user)}
-                                className="btn btn-xs btn-error text-white"
-                                title="Mark as Fraud"
-                            >
-                                <FaBan /> Fraud
-                            </button>
-                        )}
-                    </>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+  if (isLoading) {
+    return (
+      <div className="flex justify-center mt-20">
+        <span className="loading loading-bars loading-lg text-primary"></span>
       </div>
+    );
+  }
+
+  return (
+    <div className="w-full max-w-7xl mx-auto px-4 py-8">
+      {/* Header */}
+      <div className="mb-8">
+        <h2 className="text-3xl md:text-4xl font-black bg-linear-to-r from-primary via-secondary to-accent bg-clip-text text-transparent inline-block">
+          Manage Users
+        </h2>
+        <p className="text-base-content/60 mt-1 font-medium">
+          Total Users: <span className="text-primary">{users.length}</span>
+        </p>
+      </div>
+
+      {/* Responsive Views (Desktop vs Mobile) */}
+      <UserTable
+        users={users}
+        currentUser={currentUser}
+        onPromote={handleRoleChange}
+        onFraud={handleFraud}
+      />
+
+      <UserCardGrid
+        users={users}
+        currentUser={currentUser}
+        onPromote={handleRoleChange}
+        onFraud={handleFraud}
+      />
     </div>
   );
 };

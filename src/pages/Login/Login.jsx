@@ -11,6 +11,7 @@ import InputField from "../../components/Shared/Form/InputField";
 const Login = () => {
   useTitle("Login");
   const [showPassword, setShowPassword] = useState(false);
+  const [processing, setProcessing] = useState(false);
 
   const {
     register,
@@ -25,23 +26,25 @@ const Login = () => {
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
 
-  // Watch email to pass it to Forget Password page
   const emailValue = watch("email");
 
   // --- Email Login ---
   const onSubmit = async (data) => {
+    setProcessing(true);
     try {
       await signIn(data.email, data.password);
       toast.success("Login Successful!");
       navigate(from, { replace: true });
     } catch (error) {
-      console.error(error);
       toast.error("Invalid email or password.");
+    } finally {
+      setProcessing(false);
     }
   };
 
   // --- Google Login ---
   const handleGoogleSignIn = async () => {
+    setProcessing(true);
     try {
       const result = await googleSignIn();
       const userInfo = {
@@ -56,8 +59,9 @@ const Login = () => {
       toast.success(`Welcome back, ${result.user.displayName}!`);
       navigate(from, { replace: true });
     } catch (error) {
-      console.error(error);
       toast.error("Google Sign-In failed.");
+    } finally {
+      setProcessing(false);
     }
   };
 
@@ -120,12 +124,14 @@ const Login = () => {
                 </span>
               )}
 
+              <br />
+
               {/* Forgot Password */}
               <label className="label">
                 <Link
                   to="/forget-password"
                   state={{ email: emailValue }}
-                  className="label-text-alt link link-hover text-primary font-bold ml-auto mt-2"
+                  className="label-text-alt link link-hover text-primary font-bold ml-auto"
                 >
                   Forgot password?
                 </Link>
@@ -134,8 +140,15 @@ const Login = () => {
 
             {/* Submit Button */}
             <div className="form-control mt-4">
-              <button className="btn btn-gradient w-full text-white font-bold text-lg shadow-lg">
-                Login
+              <button
+                disabled={processing}
+                className="btn btn-gradient w-full text-white font-bold text-lg shadow-lg disabled:opacity-70"
+              >
+                {processing ? (
+                  <span className="loading loading-spinner"></span>
+                ) : (
+                  "Login"
+                )}
               </button>
             </div>
           </form>
@@ -156,6 +169,7 @@ const Login = () => {
           {/* Social Login */}
           <button
             onClick={handleGoogleSignIn}
+            disabled={processing}
             className="btn btn-outline btn-primary w-full"
           >
             <FaGoogle /> Sign in with Google
