@@ -63,8 +63,8 @@ const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-      { path: "profile", element: <Profile /> },
       { path: "", element: <Profile /> },
+      { path: "profile", element: <Profile /> },
 
       // --- USER ROUTES ---
       { path: "my-bookings", element: <MyBookings /> },

@@ -10,6 +10,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import auth from "../firebase/firebase.config";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 
 // Google Provider Instance
 const googleProvider = new GoogleAuthProvider();
@@ -17,6 +18,7 @@ const googleProvider = new GoogleAuthProvider();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const axiosPublic = useAxiosPublic();
 
   // Create User (Email/Pass)
   const createUser = (email, password) => {
@@ -51,18 +53,33 @@ const AuthProvider = ({ children }) => {
   };
 
   // Observer: Track User State
-  useEffect(() => {
+   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      console.log("Auth State Changed:", currentUser?.email);
-      setLoading(false);
+      
+      if (currentUser) {
+        // Get Token from Server
+        const userInfo = { email: currentUser.email };
+        axiosPublic.post("/jwt", userInfo)
+          .then(res => {
+            if (res.data.token) {
+              // Store Token in LocalStorage
+              localStorage.setItem("access-token", res.data.token);
+              setLoading(false);
+            }
+          })
+      } else {
+        // Remove Token if logged out
+        localStorage.removeItem("access-token");
+        setLoading(false);
+      }
     });
 
     // Cleanup function
     return () => {
       return unsubscribe();
     };
-  }, []);
+  }, [axiosPublic]);
 
   const authInfo = {
     user,
