@@ -29,13 +29,13 @@ const CountdownTimer = ({ date, time, size = "lg" }) => {
 
   if (timeLeft === "Expired") {
     return (
-      <div className={`inline-flex items-center gap-1 text-error font-bold bg-red-50 rounded-md border border-red-100 ${size === 'sm' ? 'px-2 py-1 text-xs' : 'px-4 py-2 text-sm'}`}>
+      <div className={`inline-flex items-center gap-1 text-error font-bold bg-error/10 rounded-md border border-error/20 ${size === 'sm' ? 'px-2 py-1 text-xs' : 'px-4 py-2 text-sm'}`}>
         <FaExclamationTriangle /> Departed
       </div>
     );
   }
 
-  if (!timeLeft) return <span className="loading loading-dots loading-xs text-primary"></span>;
+  if (!timeLeft) return <span className="loading loading-dots loading-xs text-base-content/50"></span>;
 
   // Configuration based on size prop
   const styles = size === "sm" ? {
@@ -52,12 +52,12 @@ const CountdownTimer = ({ date, time, size = "lg" }) => {
 
   const TimeBlock = ({ value, label }) => (
     <div className="flex flex-col items-center">
-      <div className={`${styles.box} flex items-center justify-center bg-base-100 shadow-sm border border-base-200`}>
-        <span className={`font-mono ${styles.text} font-black text-gray-800`}>
+      <div className={`${styles.box} flex items-center justify-center bg-base-200/60 shadow-sm border border-base-content/5 backdrop-blur-sm`}>
+        <span className={`font-mono ${styles.text} font-black text-base-content`}>
            {String(value).padStart(2, '0')}
         </span>
       </div>
-      <span className={`${styles.label} uppercase font-bold text-gray-400 mt-1 tracking-wider`}>{label}</span>
+      <span className={`${styles.label} uppercase font-bold text-base-content/50 mt-1 tracking-wider`}>{label}</span>
     </div>
   );
 

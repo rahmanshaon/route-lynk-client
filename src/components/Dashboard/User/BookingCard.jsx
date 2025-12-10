@@ -1,74 +1,70 @@
 import React from "react";
 import {
   FaCalendarAlt,
-  FaChair,
   FaArrowRight,
-  FaTicketAlt,
   FaClock,
+  FaCreditCard,
   FaCheckCircle,
   FaExclamationCircle,
+  FaTimesCircle,
 } from "react-icons/fa";
-import CountdownTimer from "../../Shared/CountdownTimer";
 import { Link } from "react-router";
+import CountdownTimer from "../../Shared/CountdownTimer";
 
 const BookingCard = ({ booking }) => {
-  // Status Colors
+  // Status Configuration
   const statusConfig = {
     pending: {
-      bg: "bg-orange-50",
-      text: "text-orange-600",
-      border: "border-orange-100",
-      label: "Pending",
+      badge: "badge-warning text-white",
+      icon: <FaExclamationCircle />,
+      label: "Approval Pending",
     },
     accepted: {
-      bg: "bg-green-50",
-      text: "text-green-600",
-      border: "border-green-100",
-      label: "Accepted",
+      badge: "badge-success text-white",
+      icon: <FaCreditCard />,
+      label: "Ready to Pay",
     },
     rejected: {
-      bg: "bg-red-50",
-      text: "text-red-600",
-      border: "border-red-100",
-      label: "Rejected",
+      badge: "badge-error text-white",
+      icon: <FaTimesCircle />,
+      label: "Cancelled",
     },
     paid: {
-      bg: "bg-blue-50",
-      text: "text-blue-600",
-      border: "border-blue-100",
+      badge: "badge-info text-white",
+      icon: <FaCheckCircle />,
       label: "Confirmed",
     },
   };
 
   const status = statusConfig[booking.status] || statusConfig.pending;
 
-  // Fallbacks for missing data
+  // Fallbacks
   const from = booking.from || "Start";
   const to = booking.to || "End";
-  const date = booking.departureDate || "Date N/A";
+  const date = booking.departureDate || "N/A";
   const time = booking.departureTime || "12:00 AM";
 
   return (
-    <div className="bg-base-100 rounded-2xl shadow-sm border border-base-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full overflow-hidden group">
-      {/* --- Header Image --- */}
-      <div className="relative h-36 overflow-hidden">
+    <div className="group flex flex-col h-full bg-base-100 rounded-2xl border border-base-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
+      {/* --- Image Header --- */}
+      <div className="relative h-40 overflow-hidden">
         <img
           src={booking.image}
           alt={booking.ticketTitle}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
+        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors"></div>
 
         {/* Status Badge */}
         <div
-          className={`absolute top-2 right-2 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase border shadow-sm ${status.bg} ${status.text} ${status.border}`}
+          className={`absolute top-3 right-3 badge ${status.badge} border-none font-bold uppercase shadow-sm`}
         >
-          {status.label}
+          {booking.status}
         </div>
 
-        {/* Title */}
-        <div className="absolute bottom-3 left-4 right-4 text-white">
-          <h3 className="font-bold text-lg leading-tight truncate drop-shadow-md">
+        {/* Title Overlay */}
+        <div className="absolute bottom-3 left-4 right-4">
+          <h3 className="text-white font-bold text-lg leading-tight truncate drop-shadow-md">
             {booking.ticketTitle}
           </h3>
         </div>
@@ -76,30 +72,30 @@ const BookingCard = ({ booking }) => {
 
       {/* --- Body Content --- */}
       <div className="p-5 flex flex-col gap-4 flex-1">
-        {/* Route Info */}
-        <div className="flex items-center justify-between bg-base-200/40 p-3 rounded-xl border border-base-200">
-          <div className="flex flex-col min-w-0">
-            <span className="text-[10px] uppercase font-bold text-gray-400">
+        {/* Route Grid */}
+        <div className="flex items-center justify-between p-3 rounded-xl bg-base-200/50 border border-base-200">
+          <div className="flex flex-col min-w-0 w-[40%]">
+            <span className="text-[10px] uppercase font-bold text-base-content/50">
               From
             </span>
             <span
-              className="font-bold text-gray-700 text-sm truncate max-w-[100px]"
+              className="font-bold text-base-content text-sm truncate"
               title={from}
             >
               {from}
             </span>
           </div>
 
-          <div className="flex items-center justify-center px-2">
-            <FaArrowRight className="text-gray-300 text-xs" />
+          <div className="flex flex-col items-center justify-center w-[20%] text-primary/50">
+            <FaArrowRight className="text-xs" />
           </div>
 
-          <div className="flex flex-col items-end min-w-0">
-            <span className="text-[10px] uppercase font-bold text-gray-400">
+          <div className="flex flex-col items-end min-w-0 w-[40%]">
+            <span className="text-[10px] uppercase font-bold text-base-content/50">
               To
             </span>
             <span
-              className="font-bold text-gray-700 text-sm truncate max-w-[100px] text-right"
+              className="font-bold text-base-content text-sm truncate text-right"
               title={to}
             >
               {to}
@@ -107,65 +103,73 @@ const BookingCard = ({ booking }) => {
           </div>
         </div>
 
-        {/* Date, Time & Seats */}
-        <div className="grid grid-cols-2 gap-3 text-xs text-gray-500">
-          <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-2">
-              <FaCalendarAlt className="text-primary" />
-              <span className="font-semibold">{date}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <FaClock className="text-orange-500" />
-              <span className="font-semibold">{time}</span>
-            </div>
+        {/* Info Grid (Date, Time, Seats) */}
+        <div className="grid grid-cols-2 gap-3 text-sm">
+          <div className="flex items-center gap-2 text-base-content/70">
+            <FaCalendarAlt className="text-primary" />
+            <span className="font-medium text-xs">{date}</span>
           </div>
-          <div className="flex flex-col items-end justify-center">
-            <div className="flex items-center gap-1 bg-primary/5 px-2 py-1 rounded-lg text-primary font-bold">
-              <FaChair /> {booking.quantity} Seats
-            </div>
+          <div className="flex items-center justify-end gap-2 text-base-content/70">
+            <FaClock className="text-orange-500" />
+            <span className="font-medium text-xs">{time}</span>
+          </div>
+
+          {/* Seats Row */}
+          <div className="col-span-2 flex items-center justify-center font-bold text-xl pt-2 border-t border-base-200/50">
+            <span className="text-base-content">
+              Booked Seats:
+              <span className="text-gradient"> {booking.quantity}</span>
+            </span>
           </div>
         </div>
 
         {/* Countdown */}
         {booking.status !== "rejected" && booking.status !== "paid" && (
-          <div className="flex justify-center pt-2 pb-1 border-t border-dashed border-gray-200">
+          <div className="flex justify-center scale-90 origin-center py-1">
             <CountdownTimer date={date} time={time} size="sm" />
           </div>
         )}
 
-        {/* --- Footer Action --- */}
-        <div className="mt-auto pt-3 flex items-center justify-between">
+        {/* Separator */}
+        <div className="border-t border-dashed border-base-300 my-1"></div>
+
+        {/* --- Footer: Price & Action --- */}
+        <div className="mt-auto flex items-center justify-between">
           <div>
-            <p className="text-[10px] uppercase font-bold text-gray-400">
-              Total Price
+            <p className="text-[10px] font-bold text-base-content/50 uppercase">
+              Total Paid
             </p>
-            <p className="text-xl font-black text-gray-800">
-              ৳{booking.totalPrice}
+            <p className="text-xl font-black text-gradient">
+              ৳ {booking.totalPrice}
             </p>
           </div>
 
+          {/* Dynamic Action Buttons */}
           {booking.status === "accepted" && (
             <Link
               to="/dashboard/payment"
               state={{ booking }}
-              className="btn btn-sm btn-primary h-9 min-h-0 text-xs font-bold shadow-md animate-pulse"
+              className="btn btn-sm btn-gradient h-10 min-h-0 px-4 rounded-lg shadow-md animate-pulse border-none text-white"
             >
-              Pay Now <FaArrowRight />
+              Pay Now
             </Link>
           )}
+
           {booking.status === "paid" && (
-            <button className="btn btn-sm btn-outline btn-success h-9 min-h-0 gap-2">
+            <div className="badge badge-outline badge-success gap-2 p-3 font-bold">
               <FaCheckCircle /> Paid
-            </button>
-          )}
-          {booking.status === "pending" && (
-            <div className="text-[10px] font-bold text-orange-500 bg-orange-50 px-3 py-1.5 rounded-full border border-orange-100 flex items-center gap-1">
-              <FaExclamationCircle /> Approval Pending
             </div>
           )}
+
+          {booking.status === "pending" && (
+            <div className="badge badge-ghost gap-2 p-3 text-xs bg-base-200 text-base-content/70">
+              <FaExclamationCircle className="text-warning" /> Waiting
+            </div>
+          )}
+
           {booking.status === "rejected" && (
-            <div className="text-xs font-bold text-red-500 bg-red-50 px-3 py-1 rounded-full">
-              Cancelled
+            <div className="badge badge-ghost gap-2 p-3 text-xs bg-red-50 text-red-500">
+              <FaTimesCircle /> Cancelled
             </div>
           )}
         </div>
