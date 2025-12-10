@@ -1,68 +1,74 @@
 import React from "react";
-import { FaUserShield, FaUserTie, FaBan, FaUserCircle } from "react-icons/fa";
+import { FaUserShield, FaUserTie, FaBan } from "react-icons/fa";
 
-const UserActionButtons = ({ user, currentUser, onPromote, onFraud }) => {
+const UserActionButtons = ({
+  user,
+  currentUser,
+  onPromote,
+  onFraud,
+  isMobile = false,
+}) => {
   const isCurrentUser = currentUser?.email === user.email;
+  const isAdmin = user.role === "admin";
 
-  // Prevent actions on the logged-in user
-  if (isCurrentUser) {
+  if (isCurrentUser || isAdmin) {
     return (
       <div className="flex justify-center w-full">
-        <div className="badge badge-lg bg-base-200 text-base-content/70 border-base-300 font-semibold gap-2 px-4 py-3 shadow-sm">
-          <FaUserCircle className="text-lg" /> Current User
-        </div>
-      </div>
-    );
-  }
-
-  // Display if user is already banned
-  if (user.role === "fraud") {
-    return (
-      <div className="flex justify-center w-full">
-        <span className="badge badge-error text-white font-bold gap-2 p-3 shadow-md">
-          <FaBan /> BANNED
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium bg-base-200/50 text-base-content/40 border border-base-300 border-dashed select-none cursor-not-allowed whitespace-nowrap">
+          No Action Required
         </span>
       </div>
     );
   }
 
-  // Display available control buttons
+  // Banned
+  if (user.role === "fraud") {
+    return (
+      <div className="flex justify-center w-full">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-bold bg-error/10 text-error border border-error/20 tracking-wide shadow-sm whitespace-nowrap">
+          <FaBan className="text-sm" /> BANNED
+        </span>
+      </div>
+    );
+  }
+
+  // ACTIONS
+  const containerClass = isMobile
+    ? "grid grid-cols-1 gap-2 w-full"
+    : "flex flex-wrap justify-center gap-2 w-full min-w-[140px]";
+
+  const btnSize = isMobile ? "btn-sm w-full" : "btn-xs";
+
   return (
-    <div className="flex gap-3 justify-center items-center w-full">
+    <div className={containerClass}>
       {/* Make Vendor */}
       {user.role === "user" && (
-        <div className="tooltip tooltip-bottom" data-tip="Promote to Vendor">
-          <button
-            onClick={() => onPromote(user, "vendor")}
-            className="btn btn-sm btn-circle bg-secondary/10 text-secondary border-secondary/20 hover:bg-secondary hover:text-white transition-all duration-300 hover:scale-110 shadow-sm"
-          >
-            <FaUserTie size={16} />
-          </button>
-        </div>
+        <button
+          onClick={() => onPromote(user, "vendor")}
+          className={`btn ${btnSize} btn-outline btn-secondary gap-1.5 whitespace-nowrap`}
+        >
+          <FaUserTie /> Make Vendor
+        </button>
       )}
 
       {/* Make Admin */}
       {user.role !== "admin" && (
-        <div className="tooltip tooltip-bottom" data-tip="Promote to Admin">
-          <button
-            onClick={() => onPromote(user, "admin")}
-            className="btn btn-sm btn-circle bg-primary/10 text-primary border-primary/20 hover:bg-primary hover:text-white transition-all duration-300 hover:scale-110 shadow-sm"
-          >
-            <FaUserShield size={16} />
-          </button>
-        </div>
+        <button
+          onClick={() => onPromote(user, "admin")}
+          className={`btn ${btnSize} btn-outline btn-primary gap-1.5 whitespace-nowrap`}
+        >
+          <FaUserShield /> Make Admin
+        </button>
       )}
 
-      {/* Mark Fraud (Vendors only) */}
+      {/* Mark Fraud */}
       {user.role === "vendor" && (
-        <div className="tooltip tooltip-bottom" data-tip="Mark as Fraud">
-          <button
-            onClick={() => onFraud(user)}
-            className="btn btn-sm btn-circle bg-error/10 text-error border-error/20 hover:bg-error hover:text-white transition-all duration-300 hover:scale-110 shadow-sm"
-          >
-            <FaBan size={16} />
-          </button>
-        </div>
+        <button
+          onClick={() => onFraud(user)}
+          className={`btn ${btnSize} btn-error text-white gap-1.5 whitespace-nowrap`}
+        >
+          <FaBan /> Mark Fraud
+        </button>
       )}
     </div>
   );

@@ -6,6 +6,7 @@ import useTitle from "../../../hooks/useTitle";
 import useAuth from "../../../hooks/useAuth";
 import UserTable from "../../../components/Dashboard/Admin/ManageUsers/UserTable";
 import UserCardGrid from "../../../components/Dashboard/Admin/ManageUsers/UserCardGrid";
+import Loader from "../../../components/Shared/Loader";
 
 const ManageUsers = () => {
   useTitle("Manage Users");
@@ -35,8 +36,6 @@ const ManageUsers = () => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, Promote",
-      background: "#1d232a",
-      color: "#fff",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -86,17 +85,14 @@ const ManageUsers = () => {
     });
   };
 
+  // --- Loading State ---
   if (isLoading) {
-    return (
-      <div className="flex justify-center mt-20">
-        <span className="loading loading-bars loading-lg text-primary"></span>
-      </div>
-    );
+    return <Loader message="Loading User Data..." />;
   }
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 py-8">
-      {/* Header */}
+      {/* Page Header */}
       <div className="mb-8">
         <h2 className="text-3xl md:text-4xl font-black bg-linear-to-r from-primary via-secondary to-accent bg-clip-text text-transparent inline-block">
           Manage Users
@@ -106,7 +102,7 @@ const ManageUsers = () => {
         </p>
       </div>
 
-      {/* Responsive Views (Desktop vs Mobile) */}
+      {/* Desktop View */}
       <UserTable
         users={users}
         currentUser={currentUser}
@@ -114,6 +110,7 @@ const ManageUsers = () => {
         onFraud={handleFraud}
       />
 
+      {/* Mobile View */}
       <UserCardGrid
         users={users}
         currentUser={currentUser}
