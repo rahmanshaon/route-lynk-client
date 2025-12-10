@@ -147,7 +147,7 @@ const Sidebar = () => {
       <div className="p-5 border-t border-base-200 bg-base-50/50">
         <div className="flex items-center gap-3 mb-4">
           {/* Theme Toggle */}
-          <div className="tooltip tooltip-top" data-tip="Switch Theme">
+          <div>
             <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-base-100 border border-base-200 shadow-sm hover:shadow-md hover:bg-base-200 transition-all cursor-pointer">
               <ThemeToggle />
             </div>

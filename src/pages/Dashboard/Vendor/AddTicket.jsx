@@ -69,16 +69,20 @@ const AddTicket = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      {/* Header Section */}
       <div className="flex flex-col gap-2 mb-8">
-        <h2 className="text-3xl font-black text-gradient">Add New Ticket</h2>
-        <p className="text-gray-500">
+        <h2 className="text-3xl md:text-4xl font-black text-gradient">
+            Add New Ticket
+        </h2>
+        <p className="text-base-content/60 font-medium">
           Fill out the details to create a new journey.
         </p>
       </div>
 
+      {/* Form Container */}
       <div className="card bg-base-100 shadow-xl border border-base-200">
-        <div className="card-body">
+        <div className="card-body p-6 md:p-8">
           <AddTicketForm
             handleSubmit={handleSubmit}
             onSubmit={handleFormSubmit}
