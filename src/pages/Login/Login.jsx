@@ -32,10 +32,22 @@ const Login = () => {
   const onSubmit = async (data) => {
     setProcessing(true);
     try {
-      await signIn(data.email, data.password);
+      // Login with Firebase
+      const result = await signIn(data.email, data.password);
+      const user = result.user;
+
+      const userInfo = {
+        name: user.displayName,
+        email: user.email,
+        image: user.photoURL,
+      };
+      // Sync with MongoDB
+      await axiosPublic.put(`/users/${user.email}`, userInfo);
+
       toast.success("Login Successful!");
       navigate(from, { replace: true });
     } catch (error) {
+      console.error(error);
       toast.error("Invalid email or password.");
     } finally {
       setProcessing(false);
