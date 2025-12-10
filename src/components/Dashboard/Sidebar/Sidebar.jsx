@@ -156,7 +156,7 @@ const Sidebar = () => {
           {/* Logout Button */}
           <button
             onClick={handleLogout}
-            className="flex-1 flex items-center justify-center gap-2 h-12 rounded-xl bg-error/10 text-error border border-error/20 hover:bg-error hover:text-white hover:shadow-lg hover:shadow-error/30 transition-all duration-300 font-semibold group"
+            className="flex-1 flex items-center justify-center gap-2 h-12 rounded-xl bg-error/10 text-error border border-error/20 hover:bg-error hover:text-white hover:shadow-lg hover:shadow-error/30 transition-all duration-300 font-semibold group cursor-pointer"
           >
             <FaSignOutAlt className="text-lg group-hover:rotate-180 transition-transform duration-300" />
             <span>Logout</span>

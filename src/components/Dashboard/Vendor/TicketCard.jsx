@@ -8,7 +8,6 @@ import {
   FaShip,
   FaCalendarAlt,
   FaClock,
-  FaChair,
   FaArrowRight,
 } from "react-icons/fa";
 import { Link } from "react-router";
@@ -73,7 +72,7 @@ const TicketCard = ({ ticket, handleDelete, isPublic = false }) => {
       <div className="p-5 flex flex-col flex-1 gap-4">
         <div>
           <h3
-            className="text-lg font-black text-base-content line-clamp-1 mb-3"
+            className="text-xl font-black text-gradient text-center line-clamp-1 mb-3"
             title={title}
           >
             {title}
@@ -133,15 +132,16 @@ const TicketCard = ({ ticket, handleDelete, isPublic = false }) => {
         <div className="flex items-center justify-between mt-auto">
           <div>
             <p className="text-[10px] font-bold text-base-content/50 uppercase">
-              Price
+              Ticket Price
             </p>
-            <p className="text-xl font-black text-primary">৳{price}</p>
+            <p className="text-xl font-black text-primary">৳ {price}</p>
           </div>
-          <div className="flex items-center gap-2 bg-base-200 px-3 py-1.5 rounded-full border border-base-300">
-            <FaChair className="text-base-content/60 text-sm" />
-            <span className="text-sm font-bold text-base-content">
-              {quantity}
-            </span>
+
+          <div className="text-right">
+            <p className="text-[10px] font-bold text-base-content/50 uppercase">
+              Available Seats
+            </p>
+            <p className="text-xl font-black text-primary">{quantity}</p>
           </div>
         </div>
       </div>
@@ -160,7 +160,7 @@ const TicketCard = ({ ticket, handleDelete, isPublic = false }) => {
             <Link
               to={`/dashboard/edit-ticket/${_id}`}
               state={{ ticket }}
-              className={`btn btn-sm btn-outline border-base-300 hover:bg-base-200 text-base-content hover:text-primary font-bold ${
+              className={`btn btn-sm btn-outline border-primary/20 text-primary hover:bg-primary  hover:text-white font-bold ${
                 status === "rejected" ? "btn-disabled" : ""
               }`}
             >

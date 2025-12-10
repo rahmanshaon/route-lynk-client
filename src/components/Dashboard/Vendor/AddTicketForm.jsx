@@ -9,6 +9,8 @@ const AddTicketForm = ({
   register,
   errors,
   loading,
+  isEdit = false,
+  oldImage = null,
 }) => {
   const transportOptions = [
     { value: "bus", label: "Bus" },
@@ -134,7 +136,7 @@ const AddTicketForm = ({
                   type="checkbox"
                   value={perk}
                   {...register("perks", {
-                    required: "At least one perk is required",
+                    required: !isEdit && "At least one perk is recommended",
                   })}
                   className="checkbox checkbox-sm checkbox-primary rounded-sm border-base-content/30"
                 />
@@ -181,17 +183,32 @@ const AddTicketForm = ({
             Ticket Banner Image
           </span>
         </label>
+
+        {/* Preview Logic for Edit Mode */}
+        {isEdit && oldImage && (
+          <div className="mb-3 w-32 h-20 rounded-lg overflow-hidden border border-base-300 shadow-sm relative group">
+            <img
+              src={oldImage}
+              alt="Current Banner"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+              Current
+            </div>
+          </div>
+        )}
+
         <input
           type="file"
           className={`file-input file-input-bordered file-input-primary w-full bg-base-100 text-base-content ${
             errors.image ? "file-input-error" : ""
           }`}
           accept="image/*"
-          {...register("image", { required: "Image is required" })}
+          {...register("image", { required: !isEdit && "Image is required" })}
         />
         {errors.image && (
           <span className="text-error text-xs mt-1 font-medium">
-            Please select an image
+            {errors.image.message}
           </span>
         )}
       </div>
@@ -200,14 +217,21 @@ const AddTicketForm = ({
       <div className="form-control mt-8">
         <button
           disabled={loading}
-          className="btn btn-gradient w-full flex items-center justify-center gap-2 text-white text-lg"
+          className="btn btn-gradient w-full flex items-center justify-center gap-2 text-white text-lg font-bold shadow-md"
         >
           {loading ? (
             <span className="loading loading-spinner text-white"></span>
           ) : (
             <FaUpload />
           )}
-          {loading ? "Publishing..." : "Publish Ticket"}
+          {/* Dynamic Button Text */}
+          {loading
+            ? isEdit
+              ? "Updating..."
+              : "Publishing..."
+            : isEdit
+            ? "Update Ticket"
+            : "Publish Ticket"}
         </button>
       </div>
     </form>

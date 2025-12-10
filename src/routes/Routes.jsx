@@ -22,6 +22,7 @@ import Advertise from "../pages/Dashboard/Admin/Advertise";
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
 import GuestRoute from "./GuestRoute";
 import ForgetPassword from "../pages/Login/ForgetPassword";
+import EditTicket from "../pages/Dashboard/Vendor/EditTicket";
 
 const router = createBrowserRouter([
   // Public Routes
@@ -103,6 +104,14 @@ const router = createBrowserRouter([
         element: (
           <VendorRoute>
             <MyAddedTickets />
+          </VendorRoute>
+        ),
+      },
+      {
+        path: "edit-ticket/:id",
+        element: (
+          <VendorRoute>
+            <EditTicket />
           </VendorRoute>
         ),
       },
