@@ -163,13 +163,13 @@ const Navbar = () => {
             <div className="hidden md:flex gap-3">
               <NavLink 
                 to="/login" 
-                className="btn btn-ghost hover:text-primary transition-colors font-bold"
+                className="btn btn-gradient px-6 font-bold"
               >
                 Login
               </NavLink>
               <NavLink
                 to="/register"
-                className="btn btn-gradient px-6 font-bold shadow-lg shadow-blue-500/30"
+                className="btn btn-gradient px-6 font-bold"
               >
                 Register
               </NavLink>
