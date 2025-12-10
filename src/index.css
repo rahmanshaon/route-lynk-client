@@ -8,13 +8,30 @@
   themes: light --default;
 }
 
-/* Custom Theme */
+/* --- LIGHT THEME --- */
 @plugin "daisyui/theme" {
   name: "route-lynk-light";
   default: true;
   --color-primary: #0052d4;
   --color-secondary: #4364f7;
   --color-accent: #6fb1fc;
+  --color-base-100: #ffffff;
+  --color-base-200: #f3f4f6;
+  --color-base-300: #e5e7eb;
+  --color-base-content: #1f2937;
+}
+
+/* --- DARK THEME --- */
+@plugin "daisyui/theme" {
+  name: "route-lynk-dark";
+  --color-primary: #4364f7;
+  --color-secondary: #0052d4;
+  --color-accent: #6fb1fc;
+  --color-base-100: #1d232a;
+  --color-base-200: #191e24;
+  --color-base-300: #15191e;
+  --color-base-content: #a6adbb;
+  --color-info: #0052d4;
 }
 
 @theme {
