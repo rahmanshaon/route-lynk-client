@@ -26,6 +26,7 @@ const TicketCard = ({ ticket, handleDelete, isPublic = false }) => {
     departureTime,
     status,
     image,
+    perks,
   } = ticket;
 
   // Icon Helper
@@ -126,10 +127,29 @@ const TicketCard = ({ ticket, handleDelete, isPublic = false }) => {
           </div>
         </div>
 
-        <div className="border-t border-dashed border-base-300 my-1"></div>
+        {/* --- PERKS SECTION --- */}
+        {perks && perks.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 pt-1">
+            {perks.slice(0, 3).map((perk, idx) => (
+              <span
+                key={idx}
+                className="text-[10px] font-bold px-2 py-1 rounded-md bg-base-200/80 text-base-content/60 border border-base-300"
+              >
+                {perk}
+              </span>
+            ))}
+            {perks.length > 3 && (
+              <span className="text-[10px] font-bold px-2 py-1 rounded-md bg-primary/10 text-primary border border-primary/20">
+                +{perks.length - 3}
+              </span>
+            )}
+          </div>
+        )}
+
+        <div className="border-t border-dashed border-base-300 my-auto"></div>
 
         {/* Price & Seats */}
-        <div className="flex items-center justify-between mt-auto">
+        <div className="flex items-center justify-between mt-2">
           <div>
             <p className="text-[10px] font-bold text-base-content/50 uppercase">
               Ticket Price
@@ -147,7 +167,7 @@ const TicketCard = ({ ticket, handleDelete, isPublic = false }) => {
         </div>
       </div>
 
-      {/* --- BUTTON --- */}
+      {/* --- BUTTON UI --- */}
       <div className="p-4 bg-base-200/40 border-t border-base-200">
         {isPublic ? (
           <Link

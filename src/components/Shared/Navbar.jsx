@@ -18,7 +18,7 @@ const Navbar = () => {
         toast.success("Logged out successfully");
         navigate("/");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => toast.error(err));
   };
 
   // Main Navigation Links
@@ -32,12 +32,15 @@ const Navbar = () => {
   return (
     <div className="bg-base-100 shadow-sm sticky top-0 z-50">
       <nav className="navbar container mx-auto px-4">
-        
         {/* --- Left Side: Mobile Dropdown & Logo --- */}
         <div className="navbar-start">
           <div className="dropdown">
             {/* Mobile Menu Button */}
-            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden mr-2">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost lg:hidden mr-2"
+            >
               <HiMenu className="h-6 w-6" />
             </div>
 
@@ -76,10 +79,16 @@ const Navbar = () => {
                 </>
               ) : (
                 <div className="flex flex-col gap-2 p-1">
-                  <Link to="/login" className="btn btn-sm btn-ghost border-gray-300">
+                  <Link
+                    to="/login"
+                    className="btn btn-sm btn-ghost border-gray-300"
+                  >
                     Login
                   </Link>
-                  <Link to="/register" className="btn btn-sm btn-gradient text-white">
+                  <Link
+                    to="/register"
+                    className="btn btn-sm btn-gradient text-white"
+                  >
                     Register
                   </Link>
                 </div>
@@ -100,7 +109,6 @@ const Navbar = () => {
 
         {/* --- Right Side: Buttons --- */}
         <div className="navbar-end gap-3">
-          
           {/* Theme Toggle (Always Visible) */}
           <ThemeToggle className="mr-1" />
 
@@ -161,10 +169,7 @@ const Navbar = () => {
           ) : (
             // --- Logged Out View: Login/Register Buttons ---
             <div className="hidden md:flex gap-3">
-              <NavLink 
-                to="/login" 
-                className="btn btn-gradient px-6 font-bold"
-              >
+              <NavLink to="/login" className="btn btn-gradient px-6 font-bold">
                 Login
               </NavLink>
               <NavLink

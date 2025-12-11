@@ -16,6 +16,7 @@ import useRole from "../../../hooks/useRole";
 import Logo from "../../Shared/Logo";
 import MenuItem from "./MenuItem";
 import ThemeToggle from "../../Shared/ThemeToggle";
+import { toast } from "react-toastify";
 
 const Sidebar = () => {
   const { logOut, loading } = useAuth();
@@ -24,6 +25,7 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     logOut();
+    toast.success("Logged out successfully");
     navigate("/");
   };
 
