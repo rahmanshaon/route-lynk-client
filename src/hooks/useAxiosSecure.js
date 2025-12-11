@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useNavigate } from "react-router"; 
+import { useNavigate } from "react-router";
 import useAuth from "./useAuth";
 
 const axiosSecure = axios.create({
@@ -14,8 +14,8 @@ const useAxiosSecure = () => {
   axiosSecure.interceptors.request.use(
     function (config) {
       const token = localStorage.getItem("access-token");
-      // console.log("Request intercepted by axiosSecure", token);
       if (token) {
+        // The server expects: authorization: `Bearer ${token}`
         config.headers.authorization = `Bearer ${token}`;
       }
       return config;
@@ -32,11 +32,11 @@ const useAxiosSecure = () => {
     },
     async (error) => {
       const status = error.response?.status;
-      // console.log("Status error in interceptor", status);
-      
+
+      // If Server says 401 (Bad Token) or 403 (Not Allowed)
       if (status === 401 || status === 403) {
-        await logOut();
-        navigate("/login");
+        await logOut(); // Force Logout
+        navigate("/login"); // Send to Login
       }
       return Promise.reject(error);
     }
