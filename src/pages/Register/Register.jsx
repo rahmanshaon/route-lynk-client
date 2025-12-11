@@ -83,7 +83,6 @@ const Register = () => {
       toast.success("Signed in with Google successfully!");
       navigate(from, { replace: true });
     } catch (error) {
-      console.error(error);
       toast.error("Google Sign-In failed.");
     } finally {
       setProcessing(false);
@@ -198,10 +197,7 @@ const Register = () => {
           {/* Login Link */}
           <p className="text-center text-sm mt-6 text-base-content/60">
             Already have an account?{" "}
-            <Link
-              to="/login"
-              className="link link-primary font-bold"
-            >
+            <Link to="/login" className="link link-primary font-bold">
               Login here
             </Link>
           </p>

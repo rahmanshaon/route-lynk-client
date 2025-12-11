@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 import { FaBus, FaHome, FaMapMarkedAlt } from "react-icons/fa";
+import useTitle from "../../hooks/useTitle";
 
 const NotFound = ({
   title = "Page Not Found",
@@ -8,6 +9,8 @@ const NotFound = ({
   linkText = "Back to Home",
   linkTo = "/",
 }) => {
+  useTitle("Not Found");
+
   return (
     <div className="min-h-[50vh] flex flex-col items-center justify-center text-center px-4">
       {/* Icon */}

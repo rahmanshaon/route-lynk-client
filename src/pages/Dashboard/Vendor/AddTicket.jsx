@@ -61,7 +61,6 @@ const AddTicket = () => {
         navigate("/dashboard/my-added-tickets");
       }
     } catch (error) {
-      console.error(error);
       toast.error("Failed to add ticket. Try again.");
     } finally {
       setLoading(false);

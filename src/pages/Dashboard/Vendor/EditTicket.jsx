@@ -82,8 +82,7 @@ const EditTicket = () => {
         toast.info("No changes made.");
       }
     } catch (error) {
-      console.error(error);
-      toast.error("Update failed. Check console for details.");
+      toast.error("Update failed.");
     } finally {
       setLoading(false);
     }

@@ -41,7 +41,6 @@ const CheckoutForm = ({ booking }) => {
         setCardError("");
       })
       .catch((err) => {
-        console.error("Payment Intent Error:", err);
         // Handle 400 Bad Request
         const errorMsg =
           err.response?.data?.message ||
