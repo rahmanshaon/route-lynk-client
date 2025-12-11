@@ -65,7 +65,7 @@ const AllTickets = () => {
       </div>
 
       {/* --- Search & Filter Bar --- */}
-      <div className="bg-base-100 p-4 rounded-xl border border-base-300 shadow-sm mb-10 sticky top-20 z-30">
+      <div className="bg-base-100 p-4 rounded-xl border border-base-300 shadow-sm mb-10">
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search Inputs */}
           <div className="flex flex-col sm:flex-row gap-3 flex-1">

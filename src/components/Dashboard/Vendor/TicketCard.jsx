@@ -35,7 +35,6 @@ const TicketCard = ({
     perks,
   } = ticket;
 
-  // Icon Helper
   const getTransportIcon = (type) => {
     const t = type?.toLowerCase() || "bus";
     if (t.includes("flight") || t.includes("plane")) return <FaPlane />;
@@ -44,7 +43,6 @@ const TicketCard = ({
     return <FaBus />;
   };
 
-  // Status Styling
   const getStatusBadge = () => {
     if (status === "approved") return "badge-success text-white";
     if (status === "rejected") return "badge-error text-white";
@@ -69,7 +67,6 @@ const TicketCard = ({
         />
         <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-transparent"></div>
 
-        {/* Transport Type Badge */}
         <div className="absolute top-3 left-3 px-3 py-1 rounded-lg bg-base-100/90 backdrop-blur-md border border-white/20 shadow-sm flex items-center gap-2">
           <span className="text-primary">
             {getTransportIcon(transportType)}
@@ -79,14 +76,12 @@ const TicketCard = ({
           </span>
         </div>
 
-        {/* Featured Badge (Top Right) */}
         {isFeatured && (
           <div className="absolute top-0 right-0 bg-linear-to-l from-primary to-secondary text-white text-[10px] font-bold px-3 py-1.5 rounded-bl-xl shadow-lg flex items-center gap-1 z-10">
             <FaStar className="text-[10px]" /> FEATURED
           </div>
         )}
 
-        {/* Status Badge */}
         {!isPublic && (
           <div
             className={`absolute top-3 right-3 badge ${getStatusBadge()} font-bold uppercase border-none shadow-sm`}
@@ -95,7 +90,6 @@ const TicketCard = ({
           </div>
         )}
 
-        {/* Title Overlay */}
         <div className="absolute bottom-3 left-4 right-4">
           <h3 className="text-white font-bold text-lg leading-tight truncate drop-shadow-md">
             {title}
@@ -103,27 +97,35 @@ const TicketCard = ({
         </div>
       </div>
 
-      {/* --- Body Section --- */}
-      <div className="p-5 flex flex-col flex-1 gap-4">
+      {/* --- Body Section  --- */}
+      <div className="p-4 flex flex-col flex-1 gap-3">
         {/* Route Visual */}
-        <div className="flex items-center justify-between p-3 rounded-xl bg-base-200/50 border border-base-200">
-          <div className="flex flex-col min-w-0 w-[40%]">
-            <span className="text-[10px] uppercase font-bold text-base-content/50">
+        <div className="flex items-center justify-between p-3 rounded-xl bg-base-200/50 border border-base-200 gap-2">
+          {/* From */}
+          <div className="flex-1 min-w-0 text-left">
+            <span className="block text-[10px] uppercase font-bold text-base-content/50">
               From
             </span>
-            <span className="font-bold text-base-content truncate" title={from}>
+            <span
+              className="block font-bold text-base-content truncate text-sm"
+              title={from}
+            >
               {from}
             </span>
           </div>
-          <div className="flex flex-col items-center justify-center w-[20%] text-primary/50">
-            <FaArrowRight className="text-sm" />
+
+          {/* Arrow */}
+          <div className="shrink-0 flex items-center justify-center w-6 text-primary/50">
+            <FaArrowRight className="text-xs" />
           </div>
-          <div className="flex flex-col items-end min-w-0 w-[40%]">
-            <span className="text-[10px] uppercase font-bold text-base-content/50">
+
+          {/* To */}
+          <div className="flex-1 min-w-0 text-right">
+            <span className="block text-[10px] uppercase font-bold text-base-content/50">
               To
             </span>
             <span
-              className="font-bold text-base-content truncate text-right"
+              className="block font-bold text-base-content truncate text-sm"
               title={to}
             >
               {to}
@@ -132,28 +134,28 @@ const TicketCard = ({
         </div>
 
         {/* Schedule Grid */}
-        <div className="grid grid-cols-2 gap-3 text-sm">
+        <div className="grid grid-cols-2 gap-2 text-sm">
           <div className="flex items-center gap-2 text-base-content/70">
-            <FaCalendarAlt className="text-primary" />
-            <span className="font-medium text-xs sm:text-sm">
+            <FaCalendarAlt className="text-primary shrink-0" />
+            <span className="font-medium text-xs sm:text-sm truncate">
               {departureDate}
             </span>
           </div>
           <div className="flex items-center justify-end gap-2 text-base-content/70">
-            <FaClock className="text-orange-500" />
-            <span className="font-medium text-xs sm:text-sm">
+            <FaClock className="text-orange-500 shrink-0" />
+            <span className="font-medium text-xs sm:text-sm truncate">
               {departureTime}
             </span>
           </div>
         </div>
 
-        {/* Perks Section */}
+        {/* Perks */}
         {perks && perks.length > 0 && (
           <div className="flex flex-wrap gap-1.5 pt-1">
             {perks.slice(0, 3).map((perk, idx) => (
               <span
                 key={idx}
-                className="text-[10px] font-bold px-2 py-1 rounded-md bg-base-200/80 text-base-content/60 border border-base-300"
+                className="text-[10px] font-bold px-2 py-1 rounded-md bg-base-200/80 text-base-content/60 border border-base-300 whitespace-nowrap"
               >
                 {perk}
               </span>
@@ -169,32 +171,34 @@ const TicketCard = ({
         <div className="border-t border-dashed border-base-300 my-auto"></div>
 
         {/* Price & Seats */}
-        <div className="flex items-center justify-between mt-2">
+        <div className="flex items-center justify-between mt-1">
           <div>
             <p className="text-[10px] font-bold text-base-content/50 uppercase">
               Ticket Price
             </p>
-            <p className="text-xl font-black text-primary">৳{price}</p>
+            <p className="text-lg md:text-xl font-black text-primary">
+              ৳{price}
+            </p>
           </div>
           <div className="text-right">
             <p className="text-[10px] font-bold text-base-content/50 uppercase">
               Available
             </p>
-            <p className="text-lg font-bold text-base-content">
+            <p className="text-base md:text-lg font-bold text-base-content">
               {quantity} Seats
             </p>
           </div>
         </div>
       </div>
 
-      {/* --- BUTTON UI --- */}
+      {/* --- Button UI --- */}
       <div className="p-4 bg-base-200/40 border-t border-base-200">
         {isPublic ? (
           <Link
             to={`/ticket/${_id}`}
-            className="btn btn-primary w-full shadow-lg shadow-primary/20 text-white font-bold"
+            className="btn btn-primary w-full shadow-lg shadow-primary/20 text-white font-bold min-h-10 h-10"
           >
-            <FaTicketAlt /> View Details
+            <FaTicketAlt /> Book Now
           </Link>
         ) : (
           <div className="grid grid-cols-2 gap-3">
@@ -209,7 +213,6 @@ const TicketCard = ({
             >
               <FaEdit /> Edit
             </Link>
-
             <button
               onClick={() => handleDelete(_id)}
               disabled={status === "rejected"}

@@ -21,7 +21,7 @@ const NewsletterCTA = () => {
           </h2>
         </div>
 
-        <p className="max-w-2xl mx-auto mt-4 text-gray-300">
+        <p className="max-w-2xl mx-auto mt-4 text-sm text-gray-300">
           Subscribe to our newsletter to get the latest updates about flash
           sales, new route schedules, and holiday discounts for Bus, Train, and
           Flight tickets.

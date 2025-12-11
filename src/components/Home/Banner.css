@@ -1,0 +1,39 @@
+/* Pagination bullets */
+.swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  opacity: 0.5;
+  border: 2px solid transparent;
+  box-sizing: border-box;
+  transition: all 0.3s;
+}
+
+.swiper-pagination-bullet-active {
+  background: #0052d4; /* Your Primary Brand Color */
+  border-color: #fff;
+  opacity: 1;
+  width: 14px;
+  height: 14px;
+}
+
+/* Navigation buttons */
+.swiper-button-next,
+.swiper-button-prev {
+  color: rgba(255, 255, 255, 0.7);
+  transition: color 0.3s, transform 0.3s;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: #0052d4; /* Brand Color */
+  transform: scale(1.1);
+}
+
+/* Hide navigation buttons on mobile devices */
+@media (max-width: 768px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: none;
+  }
+}
