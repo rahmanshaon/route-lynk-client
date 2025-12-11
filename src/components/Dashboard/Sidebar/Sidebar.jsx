@@ -18,14 +18,22 @@ import MenuItem from "./MenuItem";
 import ThemeToggle from "../../Shared/ThemeToggle";
 
 const Sidebar = () => {
-  const { logOut } = useAuth();
-  const [role] = useRole();
+  const { logOut, loading } = useAuth();
+  const [role, roleLoading] = useRole();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logOut();
     navigate("/");
   };
+
+  if (loading || roleLoading) {
+    return (
+      <div className="w-72 min-h-full bg-base-100 border-r border-base-200 flex items-center justify-center">
+        <span className="loading loading-spinner loading-md text-primary"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="w-72 min-h-full bg-base-100 border-r border-base-200 flex flex-col shadow-2xl z-50">

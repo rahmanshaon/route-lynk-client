@@ -116,7 +116,9 @@ const CheckoutForm = ({ booking }) => {
           toast.success(
             `Payment Successful! Transaction ID: ${paymentIntent.id}`
           );
-          navigate("/dashboard/history");
+          navigate("/dashboard/history", {
+            state: { transactionId: paymentIntent.id, autoDownload: true },
+          });
         }
       } catch (err) {
         toast.error(
