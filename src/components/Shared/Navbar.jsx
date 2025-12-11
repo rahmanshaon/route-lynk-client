@@ -25,8 +25,7 @@ const Navbar = () => {
   const links = [
     { path: "/", label: "Home" },
     { path: "/all-tickets", label: "All Tickets" },
-    { path: "/about", label: "About" },
-    { path: "/contact", label: "Contact" },
+    { path: "/about", label: "About Us" },
   ];
 
   return (

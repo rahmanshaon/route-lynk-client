@@ -24,6 +24,7 @@ import GuestRoute from "./GuestRoute";
 import ForgetPassword from "../pages/Login/ForgetPassword";
 import EditTicket from "../pages/Dashboard/Vendor/EditTicket";
 import NotFound from "../pages/Error/NotFound";
+import About from "../pages/About/About";
 
 const router = createBrowserRouter([
   // Public Routes
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/about",
+        element: <About />,
       },
       {
         path: "/login",
