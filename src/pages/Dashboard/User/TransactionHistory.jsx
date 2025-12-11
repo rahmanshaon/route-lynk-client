@@ -3,6 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import useTitle from "../../../hooks/useTitle";
+import Loader from "../../../components/Shared/Loader";
+import TransactionTable from "../../../components/Dashboard/User/History/TransactionTable";
+import TransactionCardGrid from "../../../components/Dashboard/User/History/TransactionCardGrid";
+import { FaHistory, FaReceipt } from "react-icons/fa";
 
 const TransactionHistory = () => {
   useTitle("History");
@@ -18,44 +22,44 @@ const TransactionHistory = () => {
     },
   });
 
-  if (isLoading) return <div className="text-center mt-20"><span className="loading loading-spinner loading-lg text-primary"></span></div>;
+  if (isLoading) return <Loader message="Loading Transactions..." />;
 
   return (
-    <div>
-      <h2 className="text-3xl font-black text-gradient mb-8">Transaction History</h2>
-
-      <div className="overflow-x-auto bg-base-100 shadow-xl rounded-xl border border-base-200">
-        <table className="table">
-          <thead className="bg-base-200 text-gray-600 uppercase text-xs">
-            <tr>
-              <th>#</th>
-              <th>Transaction ID</th>
-              <th>Ticket Info</th>
-              <th>Amount</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {payments.map((payment, index) => (
-              <tr key={payment._id} className="hover:bg-base-50">
-                <th>{index + 1}</th>
-                <td className="font-mono text-xs text-gray-500">{payment.transactionId}</td>
-                <td>
-                  <div className="font-bold">{payment.ticketTitle}</div>
-                  <div className="text-xs text-gray-400">{payment.quantity} Seats</div>
-                </td>
-                <td className="font-black text-primary">৳{payment.price}</td>
-                <td className="text-xs text-gray-500">
-                   {new Date(payment.date).toLocaleDateString()}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {payments.length === 0 && (
-            <div className="p-10 text-center text-gray-500">No transactions found.</div>
-        )}
+    <div className="w-full max-w-7xl mx-auto px-4 py-8">
+      {/* Page Header */}
+      <div className="mb-8 flex items-center gap-3">
+        <div>
+          <h2 className="text-2xl md:text-4xl font-black bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
+            Transaction History
+          </h2>
+          <p className="text-base-content/60 font-medium text-sm md:text-base">
+            Total Payments:{" "}
+            <span className="text-primary font-bold">{payments.length}</span>
+          </p>
+        </div>
       </div>
+
+      {payments.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-20 bg-base-100 rounded-3xl border border-dashed border-base-300 text-center">
+          <div className="w-20 h-20 bg-base-200 rounded-full flex items-center justify-center mb-4">
+            <FaReceipt className="text-4xl text-base-content/20" />
+          </div>
+          <h3 className="text-xl font-bold text-base-content/70">
+            No Transactions Yet
+          </h3>
+          <p className="text-sm text-base-content/50 mt-1">
+            Your payment history will appear here once you book a ticket.
+          </p>
+        </div>
+      ) : (
+        <>
+          {/* Desktop View */}
+          <TransactionTable payments={payments} />
+
+          {/* Mobile View */}
+          <TransactionCardGrid payments={payments} />
+        </>
+      )}
     </div>
   );
 };
