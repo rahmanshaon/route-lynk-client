@@ -12,44 +12,57 @@ import {
   FaPlane,
   FaCheck,
   FaTicketAlt,
+  FaInfoCircle,
+  FaUserShield,
   FaArrowRight,
   FaChair,
-  FaInfoCircle,
-  FaExclamationTriangle,
 } from "react-icons/fa";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import useAuth from "../../hooks/useAuth";
+import useRole from "../../hooks/useRole";
 import useTitle from "../../hooks/useTitle";
 import BookingModal from "../../components/TicketDetails/BookingModal";
 import CountdownTimer from "../../components/Shared/CountdownTimer";
 import Loader from "../../components/Shared/Loader";
+import NotFound from "../Error/NotFound";
 
 const TicketDetails = () => {
   const { id } = useParams();
   useTitle("Journey Details");
   const { user, loading } = useAuth();
+  const [role, roleLoading] = useRole();
   const navigate = useNavigate();
   const axiosSecure = useAxiosSecure();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [processing, setProcessing] = useState(false);
 
-  // --- FETCH DATA ---
+  // FETCH DATA
   const {
     data: ticket,
     isLoading,
     isError,
   } = useQuery({
     queryKey: ["ticket", id],
-    enabled: !loading && !!user,
+    // Only fetch if main auth loading is done (user can be null)
+    enabled: !loading,
     queryFn: async () => {
       const res = await axiosSecure.get(`/tickets/${id}`);
       return res.data;
     },
+    retry: 1,
+    refetchOnWindowFocus: false,
   });
 
   const handleBooking = async (quantity, totalPrice) => {
+    // Auth Check
     if (!user) return navigate("/login");
+
+    // Role Check (Security)
+    if (role !== "user") {
+      return toast.error("Only Customers can book tickets.");
+    }
+
     setProcessing(true);
     try {
       const bookingData = {
@@ -72,7 +85,6 @@ const TicketDetails = () => {
       if (res.data.insertedId) {
         toast.success("Booking request sent! Check My Bookings.");
         setIsModalOpen(false);
-
         navigate("/dashboard/my-bookings");
       }
     } catch (error) {
@@ -82,32 +94,29 @@ const TicketDetails = () => {
     }
   };
 
-  if (isLoading || loading)
+  // --- LOADER ---
+  if (isLoading || loading || roleLoading)
     return <Loader fullScreen message="Loading Journey Details..." />;
 
+  // --- ERROR / NOT FOUND ---
   if (isError || !ticket)
     return (
-      <div className="min-h-screen flex flex-col justify-center items-center gap-4 text-base-content/60">
-        <FaExclamationTriangle className="text-5xl text-warning animate-bounce" />
-        <h2 className="text-2xl font-bold">Ticket Unavailable</h2>
-        <p className="text-sm">
-          This ticket may have been removed or access is restricted.
-        </p>
-        <button
-          onClick={() => navigate("/all-tickets")}
-          className="btn btn-primary btn-sm"
-        >
-          Browse Tickets
-        </button>
-      </div>
+      <NotFound
+        title="Ticket Unavailable"
+        description="The ticket you are looking for might have been removed, sold out, or the ID is incorrect."
+        linkText="Browse All Tickets"
+        linkTo="/all-tickets"
+      />
     );
 
   const isSoldOut = ticket.quantity === 0;
+  // Check if user is restricted (Admin or Vendor)
+  const isRestricted = user && role !== "user";
 
   const getIcon = (type) => {
     const t = type?.toLowerCase() || "bus";
     if (t.includes("flight") || t.includes("plane")) return <FaPlane />;
-    if (t.includes("train")) return <FaTrain />;
+    if (t.includes("train") || t.includes("rail")) return <FaTrain />;
     if (t.includes("ship") || t.includes("launch")) return <FaShip />;
     return <FaBus />;
   };
@@ -229,13 +238,23 @@ const TicketDetails = () => {
                 </h2>
               </div>
 
+              {/* UPDATED BUTTON LOGIC */}
               <button
                 onClick={() => setIsModalOpen(true)}
-                disabled={isSoldOut || processing}
-                className="btn btn-primary w-full btn-lg rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 text-white font-bold border-none"
+                disabled={isSoldOut || processing || isRestricted}
+                className={`btn w-full btn-lg rounded-xl shadow-lg font-bold border-none text-white 
+                        ${
+                          isRestricted
+                            ? "btn-disabled bg-base-300 text-base-content/40"
+                            : "btn-primary shadow-primary/20 hover:shadow-primary/40"
+                        }`}
               >
                 {isSoldOut ? (
                   "Sold Out"
+                ) : isRestricted ? (
+                  <>
+                    <FaUserShield /> User Only
+                  </>
                 ) : (
                   <>
                     <FaTicketAlt /> Book Now
