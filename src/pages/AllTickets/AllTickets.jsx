@@ -48,17 +48,17 @@ const AllTickets = () => {
 
   return (
     <div className="container mx-auto pb-20 px-4 min-h-screen">
-      {/* --- Page Header (Consistent Style) --- */}
+      {/* --- Page Header --- */}
       <div className="text-center max-w-3xl mx-auto py-12 md:py-16">
         <div className="flex items-center justify-center gap-2 text-primary font-bold uppercase text-xs tracking-widest mb-3 animate-pulse">
           <FaMapMarkedAlt /> Explore All Routes
         </div>
 
-        <h1 className="text-3xl md:text-5xl font-black text-base-content mb-4 leading-tight">
+        <h1 className="text-4xl font-black text-base-content mb-4 leading-tight">
           Find Your <span className="text-gradient">Journey</span>
         </h1>
 
-        <p className="text-base-content/60 text-lg leading-relaxed max-w-2xl mx-auto">
+        <p className="text-base-content/60 leading-relaxed max-w-2xl mx-auto">
           Search approved schedules for buses, trains, launches, and flights.
           Secure your seat today!
         </p>

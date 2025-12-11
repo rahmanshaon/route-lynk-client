@@ -28,11 +28,11 @@ const AdvertisementSection = () => {
             <FaStar /> Featured Journeys
           </div>
 
-          <h2 className="text-3xl md:text-5xl font-black text-base-content mb-4 leading-tight">
+          <h2 className="text-4xl font-black text-base-content mb-4 leading-tight">
             Top Picks for <span className="text-gradient">You</span>
           </h2>
 
-          <p className="text-base-content/60 text-lg leading-relaxed">
+          <p className="text-base-content/60 leading-relaxed">
             Handpicked journeys with the best prices and amenities. Don't miss
             out on these exclusive offers!
           </p>

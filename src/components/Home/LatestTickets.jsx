@@ -30,10 +30,10 @@ const LatestTickets = () => {
           <div className="flex items-center justify-center gap-2 text-primary font-bold uppercase text-xs tracking-widest mb-3 animate-pulse">
             <FaTicketAlt /> New Arrivals
           </div>
-          <h2 className="text-3xl md:text-5xl font-black text-base-content mb-4 leading-tight">
+          <h2 className="text-4xl font-black text-base-content mb-4 leading-tight">
             Latest <span className="text-gradient">Journeys</span>
           </h2>
-          <p className="text-base-content/60 text-lg leading-relaxed">
+          <p className="text-base-content/60 leading-relaxed">
             Discover the most recently added schedules for buses, trains,
             launches, and flights. Secure your seat before it's gone!
           </p>
