@@ -16,7 +16,7 @@ const BookingModal = ({
     watch,
   } = useForm({
     mode: "onChange",
-    defaultValues: { quantity: 1 },
+    defaultValues: { quantity: 0 },
   });
 
   // Price calculation
@@ -89,9 +89,10 @@ const BookingModal = ({
 
             <input
               type="number"
-              min="1"
+              min="0"
               max={ticket.quantity}
               step="1"
+              placeholder="0"
               className={`input input-bordered w-full font-bold text-lg bg-base-100 ${
                 errors.quantity
                   ? "input-error focus:border-error text-error"
@@ -100,7 +101,7 @@ const BookingModal = ({
               {...register("quantity", {
                 valueAsNumber: true,
                 required: "Required",
-                min: { value: 1, message: "Min 1 seat" },
+                min: { value: 1, message: "Select at least 1 seat" },
                 max: {
                   value: ticket.quantity,
                   message: `Max ${ticket.quantity} seats`,
