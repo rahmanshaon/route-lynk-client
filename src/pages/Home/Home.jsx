@@ -5,8 +5,8 @@ import AdvertisementSection from "../../components/Home/AdvertisementSection";
 const Home = () => {
   return (
     <>
-      <LatestTickets />
       <AdvertisementSection />
+      <LatestTickets />
     </>
   );
 };

@@ -10,10 +10,16 @@ import {
   FaClock,
   FaArrowRight,
   FaTicketAlt,
+  FaStar,
 } from "react-icons/fa";
 import { Link } from "react-router";
 
-const TicketCard = ({ ticket, handleDelete, isPublic = false }) => {
+const TicketCard = ({
+  ticket,
+  handleDelete,
+  isPublic = false,
+  isFeatured = false,
+}) => {
   const {
     _id,
     title,
@@ -46,7 +52,14 @@ const TicketCard = ({ ticket, handleDelete, isPublic = false }) => {
   };
 
   return (
-    <div className="group relative flex flex-col h-full bg-base-100 rounded-2xl border border-base-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden">
+    <div
+      className={`group relative flex flex-col h-full bg-base-100 rounded-2xl border transition-all duration-300 overflow-hidden 
+      ${
+        isFeatured
+          ? "border-primary/40 shadow-lg shadow-primary/10 hover:shadow-primary/20"
+          : "border-base-200 shadow-sm hover:shadow-xl"
+      }`}
+    >
       {/* --- Image Section --- */}
       <div className="relative h-48 overflow-hidden">
         <img
@@ -66,7 +79,14 @@ const TicketCard = ({ ticket, handleDelete, isPublic = false }) => {
           </span>
         </div>
 
-        {/* Status Badge (Only for Vendor) */}
+        {/* Featured Badge (Top Right) */}
+        {isFeatured && (
+          <div className="absolute top-0 right-0 bg-linear-to-l from-primary to-secondary text-white text-[10px] font-bold px-3 py-1.5 rounded-bl-xl shadow-lg flex items-center gap-1 z-10">
+            <FaStar className="text-[10px]" /> FEATURED
+          </div>
+        )}
+
+        {/* Status Badge */}
         {!isPublic && (
           <div
             className={`absolute top-3 right-3 badge ${getStatusBadge()} font-bold uppercase border-none shadow-sm`}
@@ -77,7 +97,7 @@ const TicketCard = ({ ticket, handleDelete, isPublic = false }) => {
 
         {/* Title Overlay */}
         <div className="absolute bottom-3 left-4 right-4">
-          <h3 className="text-white font-bold text-xl leading-tight truncate drop-shadow-md">
+          <h3 className="text-white font-bold text-lg leading-tight truncate drop-shadow-md">
             {title}
           </h3>
         </div>
@@ -127,7 +147,7 @@ const TicketCard = ({ ticket, handleDelete, isPublic = false }) => {
           </div>
         </div>
 
-        {/* --- PERKS SECTION --- */}
+        {/* Perks Section */}
         {perks && perks.length > 0 && (
           <div className="flex flex-wrap gap-1.5 pt-1">
             {perks.slice(0, 3).map((perk, idx) => (
@@ -174,15 +194,13 @@ const TicketCard = ({ ticket, handleDelete, isPublic = false }) => {
             to={`/ticket/${_id}`}
             className="btn btn-primary w-full shadow-lg shadow-primary/20 text-white font-bold"
           >
-            <FaTicketAlt /> Book Now
+            <FaTicketAlt /> View Details
           </Link>
         ) : (
           <div className="grid grid-cols-2 gap-3">
-            {/* EDIT BUTTON */}
             <Link
               to={`/dashboard/edit-ticket/${_id}`}
               state={{ ticket }}
-              // Disable if rejected
               className={`btn btn-sm h-10 font-bold border-none shadow-sm ${
                 status === "rejected"
                   ? "btn-disabled bg-base-200 text-base-content/30"
@@ -192,7 +210,6 @@ const TicketCard = ({ ticket, handleDelete, isPublic = false }) => {
               <FaEdit /> Edit
             </Link>
 
-            {/* DELETE BUTTON */}
             <button
               onClick={() => handleDelete(_id)}
               disabled={status === "rejected"}

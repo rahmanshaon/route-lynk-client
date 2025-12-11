@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { FaSearch, FaFilter, FaSortAmountDown } from "react-icons/fa";
+import { FaSearch, FaMapMarkedAlt } from "react-icons/fa";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import useTitle from "../../hooks/useTitle";
 import TicketCard from "../../components/Dashboard/Vendor/TicketCard";
@@ -47,14 +47,20 @@ const AllTickets = () => {
   const totalPages = data?.totalPages || 1;
 
   return (
-    <div className="container mx-auto pb-20 my-10 px-4 ">
-      {/* --- Page Header --- */}
-      <div className="py-10 text-center">
-        <h1 className="text-4xl font-black text-gradient mb-3">
-          Find Your Journey
+    <div className="container mx-auto pb-20 px-4 min-h-screen">
+      {/* --- Page Header (Consistent Style) --- */}
+      <div className="text-center max-w-3xl mx-auto py-12 md:py-16">
+        <div className="flex items-center justify-center gap-2 text-primary font-bold uppercase text-xs tracking-widest mb-3 animate-pulse">
+          <FaMapMarkedAlt /> Explore All Routes
+        </div>
+
+        <h1 className="text-3xl md:text-5xl font-black text-base-content mb-4 leading-tight">
+          Find Your <span className="text-gradient">Journey</span>
         </h1>
-        <p className="text-base-content/70 text-lg max-w-2xl mx-auto">
-          Search buses, trains, launches, and flights. Book your seat today!
+
+        <p className="text-base-content/60 text-lg leading-relaxed max-w-2xl mx-auto">
+          Search approved schedules for buses, trains, launches, and flights.
+          Secure your seat today!
         </p>
       </div>
 

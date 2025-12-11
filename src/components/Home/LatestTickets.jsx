@@ -23,11 +23,11 @@ const LatestTickets = () => {
   }
 
   return (
-    <section className="py-16 md:py-24 bg-base-100">
+    <section className="pb-20">
       <div className="container mx-auto px-4">
         {/* --- Header --- */}
         <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
-          <div className="flex items-center justify-center gap-2 text-primary font-bold uppercase text-xs tracking-widest mb-3">
+          <div className="flex items-center justify-center gap-2 text-primary font-bold uppercase text-xs tracking-widest mb-3 animate-pulse">
             <FaTicketAlt /> New Arrivals
           </div>
           <h2 className="text-3xl md:text-5xl font-black text-base-content mb-4 leading-tight">
@@ -61,7 +61,7 @@ const LatestTickets = () => {
           </div>
         )}
 
-        {/* --- View All Button (Centered) --- */}
+        {/* --- View All Button --- */}
         {tickets.length > 0 && (
           <div className="text-center">
             <Link
