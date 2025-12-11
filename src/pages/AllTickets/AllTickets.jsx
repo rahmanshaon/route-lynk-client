@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { FaSearch, FaMapMarkedAlt } from "react-icons/fa";
+import { useSearchParams } from "react-router";
+import {
+  FaSearch,
+  FaFilter,
+  FaSortAmountDown,
+  FaMapMarkedAlt,
+} from "react-icons/fa";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import useTitle from "../../hooks/useTitle";
 import TicketCard from "../../components/Dashboard/Vendor/TicketCard";
@@ -10,9 +16,15 @@ const AllTickets = () => {
   useTitle("All Tickets");
   const axiosPublic = useAxiosPublic();
 
-  // --- States for Filtering & Pagination ---
-  const [searchFrom, setSearchFrom] = useState("");
-  const [searchTo, setSearchTo] = useState("");
+  // Get URL Parameters
+  const [searchParams] = useSearchParams();
+  const initialFrom = searchParams.get("from") || "";
+  const initialTo = searchParams.get("to") || "";
+
+  // Initialize State with URL Params
+  const [searchFrom, setSearchFrom] = useState(initialFrom);
+  const [searchTo, setSearchTo] = useState(initialTo);
+
   const [filterType, setFilterType] = useState("");
   const [sortPrice, setSortPrice] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -47,7 +59,7 @@ const AllTickets = () => {
   const totalPages = data?.totalPages || 1;
 
   return (
-    <div className="container mx-auto pb-20 px-4 min-h-screen">
+    <div className="container mx-auto pb-20 my-10 px-4">
       {/* --- Page Header --- */}
       <div className="text-center max-w-3xl mx-auto py-12 md:py-16">
         <div className="flex items-center justify-center gap-2 text-primary font-bold uppercase text-xs tracking-widest mb-3 animate-pulse">
@@ -142,7 +154,9 @@ const AllTickets = () => {
             No Tickets Found
           </h3>
           <p className="text-base-content/50">
-            Try changing your search filters.
+            {searchFrom || searchTo
+              ? `No routes found from "${searchFrom}" to "${searchTo}".`
+              : "Try changing your search filters."}
           </p>
           <button
             onClick={() => {

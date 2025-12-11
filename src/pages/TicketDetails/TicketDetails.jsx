@@ -28,7 +28,7 @@ import NotFound from "../Error/NotFound";
 
 const TicketDetails = () => {
   const { id } = useParams();
-  useTitle("Journey Details");
+  useTitle("Ticket Details");
   const { user, loading } = useAuth();
   const [role, roleLoading] = useRole();
   const navigate = useNavigate();

@@ -20,7 +20,7 @@ const AdvertisementSection = () => {
   if (tickets.length === 0) return null;
 
   return (
-    <section className="py-20">
+    <section className="pb-20">
       <div className="container mx-auto px-4">
         {/* --- Section Header --- */}
         <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">

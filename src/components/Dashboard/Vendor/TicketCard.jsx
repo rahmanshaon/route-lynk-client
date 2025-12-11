@@ -9,7 +9,6 @@ import {
   FaCalendarAlt,
   FaClock,
   FaArrowRight,
-  FaTicketAlt,
   FaStar,
 } from "react-icons/fa";
 import { Link } from "react-router";
@@ -196,9 +195,9 @@ const TicketCard = ({
         {isPublic ? (
           <Link
             to={`/ticket/${_id}`}
-            className="btn btn-primary w-full shadow-lg shadow-primary/20 text-white font-bold min-h-10 h-10"
+            className="btn btn-gradient w-full shadow-lg shadow-primary/20 text-white font-bold min-h-10 h-10"
           >
-            <FaTicketAlt /> Book Now
+            View Details
           </Link>
         ) : (
           <div className="grid grid-cols-2 gap-3">
