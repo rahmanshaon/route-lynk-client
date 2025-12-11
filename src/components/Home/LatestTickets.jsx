@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { FaArrowRight, FaTicketAlt } from "react-icons/fa";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import TicketCard from "../Dashboard/Vendor/TicketCard";
+import Loader from "../Shared/Loader";
 
 const LatestTickets = () => {
   const axiosPublic = useAxiosPublic();
@@ -18,60 +19,57 @@ const LatestTickets = () => {
   });
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center py-20">
-        <span className="loading loading-dots loading-lg text-primary"></span>
-      </div>
-    );
+    return <Loader small message="Loading new schedules..." />;
   }
 
   return (
-    <section className="py-16 md:py-24 bg-base-200/30">
+    <section className="py-16 md:py-24 bg-base-100">
       <div className="container mx-auto px-4">
-        
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
-          <div className="text-center md:text-left w-full md:w-auto">
-             <div className="flex items-center justify-center md:justify-start gap-2 text-primary font-bold uppercase text-xs tracking-widest mb-2">
-                <FaTicketAlt /> New Schedules
-             </div>
-             <h2 className="text-3xl md:text-4xl font-black text-gray-800">
-               Latest <span className="text-gradient">Journeys</span>
-             </h2>
-             <p className="text-gray-500 mt-2 max-w-md">
-               Check out the most recently added bus, train, launch, and flight schedules.
-             </p>
+        {/* --- Header --- */}
+        <div className="text-center max-w-3xl mx-auto mb-12 md:mb-16">
+          <div className="flex items-center justify-center gap-2 text-primary font-bold uppercase text-xs tracking-widest mb-3">
+            <FaTicketAlt /> New Arrivals
           </div>
-          
-          <Link 
-            to="/all-tickets" 
-            className="btn btn-outline border-primary text-primary hover:bg-primary hover:text-white rounded-full px-6 gap-2 transition-all w-full md:w-auto"
-          >
-             View All Tickets <FaArrowRight />
-          </Link>
+          <h2 className="text-3xl md:text-5xl font-black text-base-content mb-4 leading-tight">
+            Latest <span className="text-gradient">Journeys</span>
+          </h2>
+          <p className="text-base-content/60 text-lg leading-relaxed">
+            Discover the most recently added schedules for buses, trains,
+            launches, and flights. Secure your seat before it's gone!
+          </p>
         </div>
 
-        {/* Ticket Grid */}
+        {/* --- Ticket Grid --- */}
         {tickets.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12">
             {tickets.map((ticket) => (
-              <TicketCard 
-                key={ticket._id} 
-                ticket={ticket} 
-                isPublic={true}
-              />
+              <TicketCard key={ticket._id} ticket={ticket} isPublic={true} />
             ))}
           </div>
         ) : (
           // Empty State
-          <div className="text-center py-12 bg-white rounded-2xl shadow-sm border border-base-200">
-             <img 
-               src="https://cdn-icons-png.flaticon.com/512/7486/7486744.png" 
-               alt="Empty" 
-               className="w-16 h-16 mx-auto opacity-40 mb-4"
-             />
-             <h3 className="text-xl font-bold text-gray-400">No tickets available yet</h3>
-             <p className="text-gray-400 text-sm">Check back later for new schedules.</p>
+          <div className="text-center py-20 bg-base-200/50 rounded-3xl border-2 border-dashed border-base-300">
+            <div className="w-16 h-16 bg-base-200 rounded-full flex items-center justify-center mx-auto mb-4">
+              <FaTicketAlt className="text-3xl text-base-content/20" />
+            </div>
+            <h3 className="text-xl font-bold text-base-content/60">
+              No tickets available yet
+            </h3>
+            <p className="text-base-content/40 text-sm mt-1">
+              Check back later for new schedules.
+            </p>
+          </div>
+        )}
+
+        {/* --- View All Button (Centered) --- */}
+        {tickets.length > 0 && (
+          <div className="text-center">
+            <Link
+              to="/all-tickets"
+              className="btn btn-outline border-primary text-primary hover:bg-primary hover:text-white hover:border-primary btn-lg rounded-full px-8 gap-3 font-bold shadow-lg shadow-primary/10 transition-all hover:scale-105"
+            >
+              View All Tickets <FaArrowRight />
+            </Link>
           </div>
         )}
       </div>
