@@ -77,7 +77,7 @@ const TicketCard = ({ ticket, handleDelete, isPublic = false }) => {
 
         {/* Title Overlay */}
         <div className="absolute bottom-3 left-4 right-4">
-          <h3 className="text-white font-bold text-lg leading-tight truncate drop-shadow-md">
+          <h3 className="text-white font-bold text-xl leading-tight truncate drop-shadow-md">
             {title}
           </h3>
         </div>

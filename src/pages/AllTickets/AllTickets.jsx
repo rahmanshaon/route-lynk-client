@@ -4,6 +4,7 @@ import { FaSearch, FaFilter, FaSortAmountDown } from "react-icons/fa";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import useTitle from "../../hooks/useTitle";
 import TicketCard from "../../components/Dashboard/Vendor/TicketCard";
+import Loader from "../../components/Shared/Loader";
 
 const AllTickets = () => {
   useTitle("All Tickets");
@@ -45,95 +46,82 @@ const AllTickets = () => {
   const tickets = data?.tickets || [];
   const totalPages = data?.totalPages || 1;
 
-  // Handle Search Input
-  const handleSearch = (e) => {
-    e.preventDefault();
-    setCurrentPage(1);
-  };
-
   return (
-    <div className="container mx-auto px-4 py-8 min-h-screen">
+    <div className="container mx-auto pb-20 my-10 px-4 ">
       {/* --- Page Header --- */}
-      <div className="text-center mb-10">
-        <h1 className="text-4xl font-black text-gradient mb-2">
+      <div className="py-10 text-center">
+        <h1 className="text-4xl font-black text-gradient mb-3">
           Find Your Journey
         </h1>
-        <p className="text-gray-500 max-w-2xl mx-auto">
-          Explore approved schedules for buses, trains, launches, and flights.
-          Book your seat today!
+        <p className="text-base-content/70 text-lg max-w-2xl mx-auto">
+          Search buses, trains, launches, and flights. Book your seat today!
         </p>
       </div>
 
-      {/* --- Filter & Search Bar --- */}
-      <div className="bg-base-100 shadow-xl p-4 rounded-2xl border border-base-200 mb-8 sticky top-20 z-40 backdrop-blur-lg bg-opacity-90">
-        <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
-          {/* 1. Search Inputs */}
-          <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto flex-1">
-            <div className="relative w-full">
-              <FaSearch className="absolute left-3 top-3.5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="From (e.g. Dhaka)"
-                className="input input-bordered w-full pl-10 focus:input-primary"
-                value={searchFrom}
-                onChange={(e) => setSearchFrom(e.target.value)}
-              />
-            </div>
-            <div className="relative w-full">
-              <FaSearch className="absolute left-3 top-3.5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="To (e.g. Chittagong)"
-                className="input input-bordered w-full pl-10 focus:input-primary"
-                value={searchTo}
-                onChange={(e) => setSearchTo(e.target.value)}
-              />
-            </div>
+      {/* --- Search & Filter Bar --- */}
+      <div className="bg-base-100 p-4 rounded-xl border border-base-300 shadow-sm mb-10 sticky top-20 z-30">
+        <div className="flex flex-col lg:flex-row gap-4">
+          {/* Search Inputs */}
+          <div className="flex flex-col sm:flex-row gap-3 flex-1">
+            <input
+              type="text"
+              placeholder="From (e.g. Dhaka)"
+              className="input input-bordered w-full focus:input-primary"
+              value={searchFrom}
+              onChange={(e) => setSearchFrom(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="To (e.g. Chittagong)"
+              className="input input-bordered w-full focus:input-primary"
+              value={searchTo}
+              onChange={(e) => setSearchTo(e.target.value)}
+            />
           </div>
 
-          {/* 2. Filters & Sort */}
-          <div className="flex gap-3 w-full lg:w-auto">
-            <select
-              className="select select-bordered w-full sm:w-auto focus:select-primary"
-              value={filterType}
-              onChange={(e) => {
-                setFilterType(e.target.value);
-                setCurrentPage(1);
-              }}
-            >
-              <option value="">All Transport</option>
-              <option value="bus">Bus</option>
-              <option value="train">Train</option>
-              <option value="launch">Launch</option>
-              <option value="flight">Flight</option>
-            </select>
+          {/* Filters & Sort */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative">
+              <select
+                className="select select-bordered w-full sm:w-40 focus:select-primary"
+                value={filterType}
+                onChange={(e) => {
+                  setFilterType(e.target.value);
+                  setCurrentPage(1);
+                }}
+              >
+                <option value="">All Transport</option>
+                <option value="bus">Bus</option>
+                <option value="train">Train</option>
+                <option value="launch">Launch</option>
+                <option value="flight">Flight</option>
+              </select>
+            </div>
 
-            <select
-              className="select select-bordered w-full sm:w-auto focus:select-primary"
-              value={sortPrice}
-              onChange={(e) => {
-                setSortPrice(e.target.value);
-                setCurrentPage(1);
-              }}
-            >
-              <option value="">Sort by Price</option>
-              <option value="asc">Low to High</option>
-              <option value="desc">High to Low</option>
-            </select>
+            <div className="relative">
+              <select
+                className="select select-bordered w-full sm:w-40 focus:select-primary"
+                value={sortPrice}
+                onChange={(e) => {
+                  setSortPrice(e.target.value);
+                  setCurrentPage(1);
+                }}
+              >
+                <option value="">Sort by Price</option>
+                <option value="asc">Low to High</option>
+                <option value="desc">High to Low</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
 
       {/* --- Loading State --- */}
-      {isLoading && (
-        <div className="flex justify-center items-center h-64">
-          <span className="loading loading-spinner loading-lg text-primary"></span>
-        </div>
-      )}
+      {isLoading && <Loader message="Finding tickets..." />}
 
       {/* --- Ticket Grid --- */}
       {!isLoading && tickets.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {tickets.map((ticket) => (
             <TicketCard key={ticket._id} ticket={ticket} isPublic={true} />
           ))}
@@ -142,9 +130,14 @@ const AllTickets = () => {
 
       {/* --- Empty State --- */}
       {!isLoading && tickets.length === 0 && (
-        <div className="text-center py-20 bg-base-100 rounded-xl border border-dashed border-gray-300">
-          <h3 className="text-2xl font-bold text-gray-400">No Tickets Found</h3>
-          <p className="text-gray-400">Try adjusting your search criteria.</p>
+        <div className="text-center py-20 border-2 border-dashed border-base-300 rounded-xl">
+          <FaSearch className="text-4xl text-base-content/20 mx-auto mb-4" />
+          <h3 className="text-xl font-bold text-base-content/60">
+            No Tickets Found
+          </h3>
+          <p className="text-base-content/50">
+            Try changing your search filters.
+          </p>
           <button
             onClick={() => {
               setSearchFrom("");
@@ -152,33 +145,32 @@ const AllTickets = () => {
               setFilterType("");
               setSortPrice("");
             }}
-            className="btn btn-link text-primary mt-2"
+            className="btn btn-primary btn-sm mt-4 text-white"
           >
-            Clear Filters
+            Reset Filters
           </button>
         </div>
       )}
 
-      {/* --- Pagination Controls --- */}
+      {/* --- Pagination --- */}
       {!isLoading && totalPages > 1 && (
         <div className="flex justify-center mt-12">
-          <div className="join shadow-md bg-base-100">
+          <div className="join border border-base-300">
             <button
-              className="join-item btn hover:bg-primary hover:text-white transition-colors"
+              className="join-item btn btn-sm"
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
             >
-              « Prev
+              Prev
             </button>
 
-            {/* Generate Page Numbers */}
             {[...Array(totalPages)].map((_, idx) => (
               <button
                 key={idx}
-                className={`join-item btn ${
+                className={`join-item btn btn-sm ${
                   currentPage === idx + 1
-                    ? "btn-primary text-white"
-                    : "hover:bg-primary hover:text-white"
+                    ? "btn-active btn-primary text-white"
+                    : ""
                 }`}
                 onClick={() => setCurrentPage(idx + 1)}
               >
@@ -187,13 +179,13 @@ const AllTickets = () => {
             ))}
 
             <button
-              className="join-item btn hover:bg-primary hover:text-white transition-colors"
+              className="join-item btn btn-sm"
               onClick={() =>
                 setCurrentPage((prev) => Math.min(prev + 1, totalPages))
               }
               disabled={currentPage === totalPages}
             >
-              Next »
+              Next
             </button>
           </div>
         </div>

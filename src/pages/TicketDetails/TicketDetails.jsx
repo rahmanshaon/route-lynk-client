@@ -199,7 +199,7 @@ const TicketDetails = () => {
               {ticket.perks?.length > 0 && (
                 <div className="mt-6 pt-6 border-t border-base-200">
                   <h4 className="font-bold text-xs text-base-content/40 uppercase mb-3">
-                    Amenities
+                    Perks
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {ticket.perks.map((perk, idx) => (
