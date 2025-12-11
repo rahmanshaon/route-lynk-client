@@ -1,16 +1,13 @@
 import React from "react";
 import { Navigate } from "react-router";
 import useAuth from "../hooks/useAuth";
+import Loader from "../components/Shared/Loader";
 
 const GuestRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <span className="loading loading-bars loading-lg text-primary"></span>
-      </div>
-    );
+    return <Loader fullScreen />;
   }
 
   // If User is Logged In, Redirect to Home

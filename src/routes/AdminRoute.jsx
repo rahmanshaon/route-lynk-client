@@ -2,6 +2,7 @@ import React from "react";
 import { Navigate, useLocation } from "react-router";
 import useAuth from "../hooks/useAuth";
 import useRole from "../hooks/useRole";
+import Loader from "../components/Shared/Loader";
 
 const AdminRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -9,11 +10,7 @@ const AdminRoute = ({ children }) => {
   const location = useLocation();
 
   if (loading || roleLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <span className="loading loading-bars loading-lg text-primary"></span>
-      </div>
-    );
+    return <Loader fullScreen message="Verifying Admin Access..." />;
   }
 
   if (user && role === "admin") {
